@@ -1,0 +1,76 @@
+<!--
+<h1>Display your Spotify profile data</h1>
+
+<section id="profile">
+<h2>Logged in as <span id="displayName"></span></h2>
+<span id="avatar"></span>
+<ul>
+    <li>User ID: <span id="id"></span></li>
+    <li>Email: <span id="email"></span></li>
+    <li>Spotify URI: <a id="uri" href="#"></a></li>
+    <li>Link: <a id="url" href="#"></a></li>
+    <li>Profile Image: <span id="imgUrl"></span></li>
+</ul>
+</section>
+
+
+<div class="home-container">
+    <h1 class="headerPage">Spotify api</h1>
+    <div class="search-form">
+
+        <div class="form-group">
+
+            <label for="username">Entre le nom de la musique que tu veux :</label>
+            <br />
+            <input type="text" name="username" placeholder="Search.." [(ngModel)]="musicSearch" />
+        </div>
+        <div class="btn-container">
+            <div class="error">{{ errorMsg }}</div>
+            <button class="btn btn-dark" (click)="getSearch()">Search</button>
+        </div>
+    </div>
+    <span id="searchResult"></span>
+</div>
+-->
+<div class="scrollable-content custom-background d-flex justify-content-center align-items-center vh-100">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col">
+            <!-- Contenu de la section 1 -->   
+                <div class="card shadow ">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="searchInput">Entre le nom de la musique que tu veux :</label>
+                            <div class="mb-2"></div> <!-- Espace vertical personnalisé -->
+                            <input type="text" class="form-control" id="searchInput" placeholder="Entrez votre texte" [(ngModel)]="musicSearch">
+                        </div>
+                        <div class="mb-3"></div> <!-- Espace vertical personnalisé -->
+                            <button type="button" class="btn btn-primary" (click)="getSearch()">Rechercher</button>
+                        <div class="mt-2">
+                            <p class="text-danger">{{ errorMsg }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4 d-flex justify-content-center" *ngIf="IsSearch">
+            <div class="col">
+              <!-- Contenu de la section 2 -->
+              <a href="{{LienClick}}" target="_blank">
+                <div class="bg-dark text-white p-3 rounded-4 d-flex">
+                  <div class="p-2">
+                    <img src="{{imagePath}}" alt="Titre de la chanson" class="rounded-circle" style="width: 80px; height: 80px;">
+                  </div>
+                  <div class="p-2 ">
+                    <h2 class="text-light mb-0">{{MusicName}}</h2>
+                    <h5 class="text-light font-weight-bold mb-1">{{ArtistName}}</h5>
+                  </div>
+                  <div class="p-2   ms-auto align-self-center">
+                    <i class="bi bi-arrow-up-right-square-fill custom-icon"></i>
+                  </div>
+                </div>
+              </a>
+            </div>
+        </div>
+    </div>
+</div>

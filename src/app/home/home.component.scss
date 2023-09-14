@@ -1,0 +1,18 @@
+.custom-background {
+    background: linear-gradient(140deg, #1DB954 0%, #191414 90%);/* Remplacez par votre couleur personnalisée */
+  }
+
+$primary: black; /* Nouvelle couleur primaire */
+
+@import 'bootstrap';
+
+.custom-icon {
+    font-size: 35px; /* Adjust the size as needed */
+  }
+
+  .scrollable-container {
+    max-height: 60vh; /* Définissez la hauteur maximale souhaitée pour afficher deux éléments */
+    overflow-y: scroll; /* Ajoute une barre de défilement verticale si nécessaire */
+    overflow-x: hidden;
+  }
+

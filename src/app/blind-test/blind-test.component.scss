@@ -1,0 +1,51 @@
+
+
+
+.custom-background {
+  background:  linear-gradient(140deg, #1DB954 0%, #191414 90%); /*#202124;*/ /* linear-gradient(180deg, #1DB954  10%, #191414  100%); */
+}
+
+.blue {
+  background-color: rgb(10, 88, 202);
+}
+
+
+.custom-icon {
+  font-size: 50px; /* Adjust the size as needed */
+}
+
+.custom-icon-little {
+  font-size: 35px; /* Adjust the size as needed */
+}
+
+.gray {
+  background-color: rgb(220,220,220);
+}
+
+.green {
+  background-color: rgb(50,205,50);
+}
+
+.scrollable-container {
+  max-height: 30vh; /* Définissez la hauteur maximale souhaitée pour afficher deux éléments */
+  overflow-y: scroll; /* Ajoute une barre de défilement verticale si nécessaire */
+  overflow-x: hidden;
+}
+
+.height30 {
+  height: 50vh;
+  overflow-y: scroll; /* Ajoute une barre de défilement verticale si nécessaire */
+  overflow-x: hidden;
+}
+
+.red1 {
+  background-color: rgb(247, 44, 44);
+  border: red;
+
+}
+
+.red1:hover {
+  background-color: rgb(153, 6, 6);
+  border: rgb(153, 6, 6);
+
+}

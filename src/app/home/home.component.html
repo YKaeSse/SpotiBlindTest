@@ -1,0 +1,38 @@
+
+<div class="scrollable-content d-flex custom-background justify-content-center align-items-center min-vh-100 ">
+    <div class="container mt-4">
+        <div class="row justify-content-center align-self-center mt-3">
+            <h2 class="col-12 text-center">Bienvenue sur SpotiBlindTest</h2>
+        </div>
+        <div class="row justify-content-center align-self-center">
+            <h4 class="col-12 text-center">Le blind test qui teste vos connaissances sur vos playlists.</h4>
+        </div>
+        <div class="row justify-content-center align-self-center">
+            <h4 class="col-12 text-center">Choisis une de tes playlists pour commencer à t'amuser :</h4>
+        </div>
+        <div class="row justify-content-center align-self-center">
+            <h4 class="col-12 text-center">Si l'api ne s'affiche pas il s'agit d'un problème de droit. Veuillez nous contacter.</h4>
+        </div>
+        <div class="mt-4"></div>
+        <div class="row mb-4" id="playlistScroll">
+            <div class="col">
+                <!-- Contenu de la section 2 -->
+                    <div class="row row-cols-2 row-cols-md-3  row-cols-lg-4 g-2 g-lg-3 ">
+                        <div class="mb-3" *ngFor="let item of items">
+                            <a href="{{item.playlistUrl}}" (click)="resetCount()">
+                            <div class="bg-dark text-white p-3 rounded-4 aspect-ratio">
+                                <div class="col-12 d-flex justify-content-center align-items-center">
+                                    <img src="{{item.imagePath}}" alt="{{item[0]}}" class="rounded" style="width: 80%; height: 80%;">
+                                </div>
+                                <div class="col-12 d-flex p-3 justify-content-center align-items-center text-center">
+                                    <h4 class="text-light text-truncate mb-0 text-decoration-none">{{item.PlaylistName}}</h4>
+                                </div>
+                            </div>
+                            </a>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
