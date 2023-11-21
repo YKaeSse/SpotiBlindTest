@@ -15,7 +15,7 @@ app.get('*', (req, res) => {
 });
 
 // Démarrez le serveur sur le port de votre choix
-const port = 3006;
+const port = 3007;
 app.listen(port, () => {
   console.log(`Serveur Express en cours d'exécution sur le port ${port}`);
 });
