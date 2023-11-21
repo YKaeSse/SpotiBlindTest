@@ -1,8 +1,13 @@
 // server.js
 const express = require('express');
 const path = require('path');
+const history = require('connect-history-api-fallback');
 
 const app = express();
+
+// Use the history API fallback middleware
+app.use(history());
+
 
 // Définir le dossier des fichiers de développement
 app.use(express.static(path.join(__dirname, 'src')));
