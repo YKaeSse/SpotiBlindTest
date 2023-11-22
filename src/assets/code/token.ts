@@ -1,14 +1,11 @@
-import * as dotenv from "dotenv";
+
 
 export async function redirectToAuthCodeFlow(clientId: string) {
     
     const verifier = generateCodeVerifier(128);
     const challenge = await generateCodeChallenge(verifier);
 
-    
-    dotenv.config({ path: __dirname+'/.env' });
     localStorage.setItem("verifier", verifier);
-    console.log(process.env["PORT"])
     const params = new URLSearchParams();
     params.append("client_id", clientId);
     params.append("response_type", "code");

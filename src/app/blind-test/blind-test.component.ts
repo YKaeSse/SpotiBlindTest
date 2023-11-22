@@ -50,6 +50,7 @@ export class BlindTestComponent{
     // si pas d'id redirige vers la home
     if (!this.idPlaylist)
     {
+      // TODO gros bug sa mere quand il enelve le id ca redirige vers home mais ca crash
       this.stopMusic();
       this.router.navigate(['/home']);
     }
