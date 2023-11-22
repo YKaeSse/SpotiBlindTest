@@ -52,6 +52,7 @@ export class HomeComponent {
     this.configService.actualNumber = 0;
   }
   async ngOnInit() {
+    console.log("home");
     if (!this.configService.access_token) {
         redirectToAuthCodeFlow(this.configService.clientId);
     } else {

@@ -30,6 +30,7 @@ export class BlindTestComponent{
   currentMusicName: string | undefined  = undefined;
   currentMusicArtists: string[] | undefined = undefined;
   playlistTracks: PlaylistTracks | null = null;
+  totalNumberTracks: number | undefined = 0;
   IsFindSound: boolean = false;
   IsFindArtiste : boolean = false;
   IsPresque : boolean = false;
@@ -50,13 +51,15 @@ export class BlindTestComponent{
     // si pas d'id redirige vers la home
     if (!this.idPlaylist)
     {
-      // TODO gros bug sa mere quand il enelve le id ca redirige vers home mais ca crash
       this.stopMusic();
       this.router.navigate(['/home']);
+      return;
     }
     else
     {
-      this.playlistTracks = await getPlaylistTracks(this.configService.access_token, this.idPlaylist);
+      const {tracks, totalTrack} = await getPlaylistTracks(this.configService.access_token, this.idPlaylist);
+      this.playlistTracks = tracks
+      this.totalNumberTracks = totalTrack || 0;
       this.configService.totalTracks = this.playlistTracks?.items.length || 0;
       this.configService.playedTracks = [];
       console.log(this.playlistTracks)
@@ -251,10 +254,11 @@ export class BlindTestComponent{
     this.IsPresque = false;
 
     // on doit gerer si c'est out of range
-    if (this.playlistTracks && this.configService.actualNumber >= this.playlistTracks.total )
+    if (this.totalNumberTracks && this.configService.actualNumber >= this.totalNumberTracks )
     {
       // fin de la playlist
       this.router.navigate(['/home']);
+      return;
     }
 
     if (this.playlistTracks && this.usedTracks.length === this.playlistTracks.items.length) {
@@ -263,7 +267,7 @@ export class BlindTestComponent{
       this.configService.actualNumber = 0; // Réinitialiser la valeur de actualNumber
     }
 
-    let randomIndex = Math.floor(Math.random() * (this.playlistTracks ? this.playlistTracks.items.length : 0));
+    let randomIndex = Math.floor(Math.random() * (this.playlistTracks ? this.playlistTracks?.items.length : 0));
     while (this.usedTracks.includes(randomIndex)) {
       randomIndex = Math.floor(Math.random() * (this.playlistTracks ? this.playlistTracks.items.length : 0));
     }

@@ -1,0 +1,31 @@
+
+* {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+p {
+    font-size: 50px;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(235, 207, 207);
+}
+
+.main {
+    height: calc(100vh - 120px);
+    background:rgba(187, 33, 33, 0.5);
+    width: 100%;
+    flex-direction: column;
+}
+
+.button {
+    margin-top: 10px;
+    font-size: 16px;
+    width: 120px;
+    height: 40px;
+    background-color: rgb(39, 39, 39);
+    border-radius: 10px;
+}
