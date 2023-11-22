@@ -47,7 +47,7 @@ export class HomeComponent {
         PlaylistName: playlist.name.toString()
       });
     }
-}
+ }
   resetCount() {
     this.configService.actualNumber = 0;
   }
