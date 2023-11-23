@@ -12,6 +12,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+
 // Démarrez le serveur sur le port de votre choix
 const port = 3007;
 app.listen(port, () => {
