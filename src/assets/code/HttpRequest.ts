@@ -3,6 +3,7 @@ import { UserProfile, Search, Track, UserPlaylists, PlaylistTracks,PlaylistTrack
 import { redirectToAuthCodeFlow} from 'src/assets/code/token'
 import { ConfigService } from 'src/app/shared/config.service';
 import { elementAt } from 'rxjs';
+import { off } from 'process';
 
 const config = new ConfigService();
 
@@ -33,85 +34,96 @@ export async function getMusic(code: string, searchText: string): Promise<Search
   return await result.json();
 }
 
-export async function getPlaylistTracks(code: string, playlistID: string): Promise<{ tracks: PlaylistTracks; totalTrack: number; }>  {
+export async function getPlaylistTracks2(code: string, playlistID: string): Promise<{ tracks: PlaylistTracks; totalTrack: number; }>  {
 
   //let totalTracks[]: PlaylistTracks = [];
   //TODO qunad la requete fait plus de 100 sons au total on lance une deuxieme requete qui va renvoyer les 100 premiers son plus le reste
-  const tracks: PlaylistTracksItem[] = [];
-
-  async function fetchTracks(url: string) {
-    const response = await fetch(url, {
+  let response:Response;
+  let tracks:PlaylistTracksItem[] = [];
+  // `https://api.spotify.com/v1/playlists/${playlistID}/tracks?offset=${offset}&limit=${limit}`
+  let requestUrl = `https://api.spotify.com/v1/playlists/${playlistID}/tracks?limit=50`;
+  let result;
+  do 
+  {
+    response = await fetch(requestUrl, {
       method: "GET",
       headers: { Authorization: `Bearer ${code}` }
     });
 
     if (!response.ok) {
+      console.log(response)
       if (response.status === 401) {
         redirectToAuthCodeFlow(config.clientId);
       }
-      console.log(response);
       throw new Error(`Failed to get Playlist Tracks`);
     }
+    result = await response.json();
 
-    const data = await response.json();
-    const currentTracks = data.items;
+    const currentTracks = result.items;
+    requestUrl = result.next;
     tracks.push(...currentTracks);
+    
+  } while (result.next !== null)
 
-    if (data.next !== null) {
-      await fetchTracks(data.next);
-    }
-  }
-
-  // Lancement initial de la fonction
-  await fetchTracks(`https://api.spotify.com/v1/playlists/${playlistID}/tracks?limit=50`);
-
+  
   const PlaylistTracks: PlaylistTracks = { "items": tracks } as PlaylistTracks;
-  console.log(PlaylistTracks);
-  return { tracks: PlaylistTracks, totalTrack: tracks.length };
+  console.log(PlaylistTracks)
+  return {tracks: PlaylistTracks, totalTrack: result.total};
 }
 
-/*
-  export async function getPlaylistTracks(code: string, playlistID: string): Promise<{ tracks: PlaylistTracks; totalTrack: number; }>  {
-  let response: Response;
+// `https://api.spotify.com/v1/playlists/${playlistID}/tracks?offset=${offset}&limit=${limit}`
+
+export async function getPlaylistTracks(code: string, playlistID: string): Promise<{ tracks: PlaylistTracks; totalTrack: number; }>  {
   let tracks: PlaylistTracksItem[] = [];
   let requestUrl = `https://api.spotify.com/v1/playlists/${playlistID}/tracks?limit=50`;
-  let result;
 
-  // Stocke les promesses de chaque requête dans un tableau
+  //first 50 songs
   const promises: Promise<void>[] = [];
+  const response = await fetch(requestUrl, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${code}` }
+  })
+  if (!response.ok) {
+    console.log(response)
+    if (response.status === 401) {
+      redirectToAuthCodeFlow(config.clientId);
+    }
+    throw new Error(`Failed to get Playlist Tracks`);
+  }
+  const result = await response.json();
+  const currentTracks = result.items;
+  requestUrl = result.next;
+  tracks.push(...currentTracks);
+  const total = result.total;
 
-  do {
+  //async with others
+  const limitMax = (Math.floor(total / 50) + 1) * 50;
+  for (let offset = 50; offset < limitMax; offset += 50)
+  {
+    let limit = offset + 50;
+    requestUrl = `https://api.spotify.com/v1/playlists/${playlistID}/tracks?offset=${offset}&limit=${limit}`
     const promise = fetch(requestUrl, {
       method: "GET",
       headers: { Authorization: `Bearer ${code}` }
-    })
-      .then(async (res) => {
-        if (!res.ok) {
-          console.log(res);
-          throw new Error(`Failed to get Playlist Tracks`);
+    }).then(async (res) => {
+      if (!res.ok) {
+        if (res.status === 401) {
+          redirectToAuthCodeFlow(config.clientId);
         }
+        console.log(res);
+        throw new Error(`Failed to get Playlist Tracks`);
+      } 
         const data = await res.json();
-        const currentTracks = data.items;
-        requestUrl = data.next;
-        tracks.push(...currentTracks);
+        tracks.push(...data.items);
       });
-
-    promises.push(promise);
-
-  } while (result.next !== null);
-
-  // Attend que toutes les promesses soient résolues avant de continuer
-  await Promise.all(promises);
-
-  if (response.status === 401) {
-    redirectToAuthCodeFlow(config.clientId);
   }
+
+  await Promise.all(promises);
 
   const PlaylistTracks: PlaylistTracks = { "items": tracks } as PlaylistTracks;
   console.log(PlaylistTracks);
-  return { tracks: PlaylistTracks, totalTrack: result.total };
+  return { tracks: PlaylistTracks, totalTrack: tracks.length }; 
 }
-*/
 
 /* 5HCGrYR7g9u2X9Ju83yQLm */
 export async function getPlayable(code: string, searchText: string): Promise<Track> {
