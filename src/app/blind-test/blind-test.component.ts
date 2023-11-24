@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { error } from 'console';
+import { availableParallelism } from 'os';
 import { UnaryFunction } from 'rxjs';
 
 import { ConfigService } from 'src/app/shared/config.service';
@@ -30,11 +32,13 @@ export class BlindTestComponent{
   currentMusicName: string | undefined  = undefined;
   currentMusicArtists: string[] | undefined = undefined;
   playlistTracks: PlaylistTracks | null = null;
+  totalNumberTracks: number | undefined = 0;
   IsFindSound: boolean = false;
   IsFindArtiste : boolean = false;
-  IsPresque : boolean = false;
+  IsAlmostFind : boolean = false;
   IsFindAll: boolean = this.IsFindArtiste && this.IsFindSound;
   usedTracks: number[] = [];
+  skipButtonAvailable: boolean = true;
 
   colorArtist: string = "gray";
   colorTitle: string = "gray";
@@ -52,13 +56,21 @@ export class BlindTestComponent{
     {
       this.stopMusic();
       this.router.navigate(['/home']);
+      return;
     }
     else
     {
-      this.playlistTracks = await getPlaylistTracks(this.configService.access_token, this.idPlaylist);
+      const {tracks, totalTrack} = await getPlaylistTracks(this.configService.access_token, this.idPlaylist);
+      this.playlistTracks = tracks
+      this.totalNumberTracks = totalTrack || 0;
       this.configService.totalTracks = this.playlistTracks?.items.length || 0;
       this.configService.playedTracks = [];
       console.log(this.playlistTracks)
+    }
+
+    if (this.totalNumberTracks === 0)
+    {
+      throw new Error("La playlist choisit est vide");
     }
 
     await this.nextMusic(true);
@@ -79,7 +91,7 @@ export class BlindTestComponent{
   findMusic(): void {
     let input = document.getElementById('InputMusic') as HTMLInputElement;
     let value: string = input.value.trim().toLowerCase();
-    this.IsPresque = false;
+    this.IsAlmostFind = false;
     let DesactivePresque = false;
     if (!value || !input.value || input.value === "") {
       return;
@@ -121,7 +133,7 @@ export class BlindTestComponent{
     if (DesactivePresque === false ) {
       if (!this.IsFindSound  && this.currentMusicName && this.isStringSimilar(this.currentMusicName.toLowerCase(), value, 0.70)|| presqueArtist)
       {
-        this.IsPresque = true;
+        this.IsAlmostFind = true;
         console.log("Presque !!")
       }
     }
@@ -221,16 +233,25 @@ export class BlindTestComponent{
       try {
         this.audioElement.play();
       } catch (error) {
-        console.log("error in musique")
+        console.error("playMusic(): Error when trying to play music ")
         this.nextMusic();
       }
       
     }
   }
 
+  skipMusic()
+  {
+    this.skipButtonAvailable = false;
+    setTimeout(async () => {
+      await this.nextMusic();
+      this.skipButtonAvailable = true;
+    }, 1000);
+  }
+
   async nextMusic(firstLaunch: boolean = false) {
     
-    if (this.actualMusic !== undefined)
+    if (this.actualMusic !== undefined && this.actualMusic.preview_url !== null)
     {
       this.items.unshift({
         songUrl: this.actualMusic.external_urls.spotify,
@@ -247,13 +268,15 @@ export class BlindTestComponent{
     this.IsFindAll = false;
     this.IsFindSound = false;
     this.IsFindArtiste = false;
-    this.IsPresque = false;
+    this.IsAlmostFind = false;
 
     // on doit gerer si c'est out of range
-    if (this.playlistTracks && this.configService.actualNumber >= this.playlistTracks.total )
+    if (this.totalNumberTracks && this.configService.actualNumber >= this.totalNumberTracks )
     {
       // fin de la playlist
+      // TODO mettre un message d'info sur l'ecran que la playlist est finit 
       this.router.navigate(['/home']);
+      return;
     }
 
     if (this.playlistTracks && this.usedTracks.length === this.playlistTracks.items.length) {
@@ -262,7 +285,7 @@ export class BlindTestComponent{
       this.configService.actualNumber = 0; // Réinitialiser la valeur de actualNumber
     }
 
-    let randomIndex = Math.floor(Math.random() * (this.playlistTracks ? this.playlistTracks.items.length : 0));
+    let randomIndex = Math.floor(Math.random() * (this.playlistTracks ? this.playlistTracks?.items.length : 0));
     while (this.usedTracks.includes(randomIndex)) {
       randomIndex = Math.floor(Math.random() * (this.playlistTracks ? this.playlistTracks.items.length : 0));
     }
@@ -270,9 +293,10 @@ export class BlindTestComponent{
     // recuperer la musique suivante de la playlist
     /// changer le this.audioElement son id
     this.musicTrack = this.playlistTracks?.items[randomIndex].track.id;
-    this.currentMusicName = undefined;
     this.currentMusicName =  this.playlistTracks?.items[randomIndex].track.name;
+
     // remove - and ( because he change the name of music and we don't find it
+    // ex : coucou - COLOR SHOW -> coucou ou Salut (feat. Nekfeu) -> Salut
     if (this.currentMusicName)
     {
       for (let i = 0; i < this.currentMusicName.length; i++)
@@ -287,10 +311,12 @@ export class BlindTestComponent{
 
     console.log(this.currentMusicName);
 
+    // charge les artists de la musique en question
     let tmp = this.playlistTracks?.items[randomIndex].track.artists;
     this.currentMusicArtists = undefined;
     if (tmp)
     {
+      // TODO pas compris pk ya cette condition si on la set au dessus a undefined
       if (this.currentMusicArtists === undefined)
       {
         this.currentMusicArtists = [];
@@ -306,31 +332,38 @@ export class BlindTestComponent{
     this.configService.actualNumber += 1;
     // Récupérez l'URL de la musique que vous souhaitez jouer
     this.actualMusic = await this.getMusicPlayable();
-    if (this.actualMusic === undefined)
+    console.log("l.324 actualMusic :", this.actualMusic, " | id de la musique :", this.musicTrack)
+    if (this.actualMusic === undefined || this.actualMusic.preview_url === null)
     {
-      this.nextMusic();
+      // le preview de 30 sec est pas dispo donc on skip sans le mettre dans l'historique
+      console.log("je pense que le bug des doubles musiques vients de la, regarder si ca vient de passer deux musiques")
+      await this.nextMusic(firstLaunch);
       return;
     }
+
     // Créez un nouvel élément audio
     this.audioElement = new Audio(this.actualMusic?.preview_url);
     // En cas d'erreur lors du chargement de la source audio
-    this.audioElement.addEventListener('error', (e) => {
-      console.log("Erreur lors du chargement de la source audio", e);
-      this.nextMusic(firstLaunch);
+    // TODO ca me parait bizarre ca -> verifier comment ca marche. Pour moi ca va du tout la, un listener ca se met dans l'initialize ou 
+    // dans l'endroit ou on declare audioElement mais dans un fonction qu'on appelle plusiseurs fois c bizarre
+    this.audioElement.addEventListener('error', async (e) => {
+      console.error("Erreur lors du chargement de la source audio", e);
+      await this.nextMusic(firstLaunch);
     });
     // Écoutez l'événement "ended" pour réinitialiser le bouton de lecture lorsque la musique est terminée
-    this.audioElement.addEventListener('ended', () => {
-      this.nextMusic();
+    this.audioElement.addEventListener('ended', async () => {
+      await this.nextMusic();
     });
 
     if (this.audioElement) {
       // Ajoutez l'écouteur d'événement "timeupdate" ici
-      this.audioElement.addEventListener("timeupdate", () => {
-        this.updateProgress();
+      this.audioElement.addEventListener("timeupdate", async () => {
+        await this.updateProgress();
       });
     }
-    if (!firstLaunch && !this.audioElement.error)
+    if (!firstLaunch && this.actualMusic.preview_url !== null && !this.audioElement.error)
     {
+      // TODO ca rentre jamais la dedans on change jamais firstLaunch a true 
       setTimeout(() => {
         // Code to be executed after 1 second
         this.togglePlayPause();

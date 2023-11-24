@@ -1,13 +1,14 @@
 //const url = "https://spotiblindtest.emapse.com/callback";
 const url = "http://localhost:3007/callback";
 
+
 export async function redirectToAuthCodeFlow(clientId: string) {
+
     const verifier = generateCodeVerifier(128);
     const challenge = await generateCodeChallenge(verifier);
 
 
     localStorage.setItem("verifier", verifier);
-
     const params = new URLSearchParams();
     params.append("client_id", clientId);
     params.append("response_type", "code");

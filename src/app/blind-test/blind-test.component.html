@@ -5,7 +5,7 @@
     </div>
     <div class="music-player">
             <i (click)="togglePlayPause()" class=" {{PlayOrPause}}" id="playButton" ></i>
-            <div [style.width.%]="currentProgress"></div>            
+            <div [style.width.%]="currentProgress"></div>
     </div>
     <div class="find-items">
         <div class="{{colorArtist}}"> <!--  *ngIf="IsFindArtiste" -->
@@ -19,7 +19,7 @@
     </div>
     <div class="button-items">
         <div (click)="nextMusic()" *ngIf="IsFindAll">Son suivant</div>
-        <div (click)="nextMusic()" *ngIf="!IsFindAll">Passer le son</div>
+        <div (click)="nextMusic()" *ngIf="!IsFindAll" [disabled]="!skipButtonAvailable">Passer le son</div>
     </div>
     <div class="songs-items">
         <div >Anciens sons</div>
@@ -33,4 +33,5 @@
                 <i class="bi-arrow-up-right-square-fill" ></i>
             </div>
         </a>
+    </div>
 </div>
