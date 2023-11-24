@@ -143,4 +143,3 @@ export async function getUserPlaylists(code: string, offset: number): Promise<Us
   const Playlists: UserPlaylists = { "items": currentPlaylist } as UserPlaylists;
   return Playlists;
 }
-

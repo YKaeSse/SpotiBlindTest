@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { error } from 'console';
+import { availableParallelism } from 'os';
 import { UnaryFunction } from 'rxjs';
 
 import { ConfigService } from 'src/app/shared/config.service';
@@ -37,6 +38,7 @@ export class BlindTestComponent{
   IsAlmostFind : boolean = false;
   IsFindAll: boolean = this.IsFindArtiste && this.IsFindSound;
   usedTracks: number[] = [];
+  skipButtonAvailable: boolean = true;
 
   colorArtist: string = "gray";
   colorTitle: string = "gray";
@@ -238,9 +240,18 @@ export class BlindTestComponent{
     }
   }
 
+  skipMusic()
+  {
+    this.skipButtonAvailable = false;
+    setTimeout(async () => {
+      await this.nextMusic();
+      this.skipButtonAvailable = true;
+    }, 1000);
+  }
+
   async nextMusic(firstLaunch: boolean = false) {
     
-    if (this.actualMusic !== undefined)
+    if (this.actualMusic !== undefined && this.actualMusic.preview_url !== null)
     {
       this.items.unshift({
         songUrl: this.actualMusic.external_urls.spotify,
@@ -322,33 +333,35 @@ export class BlindTestComponent{
     // Récupérez l'URL de la musique que vous souhaitez jouer
     this.actualMusic = await this.getMusicPlayable();
     console.log("l.324 actualMusic :", this.actualMusic, " | id de la musique :", this.musicTrack)
-    if (this.actualMusic === undefined)
+    if (this.actualMusic === undefined || this.actualMusic.preview_url === null)
     {
+      // le preview de 30 sec est pas dispo donc on skip sans le mettre dans l'historique
       console.log("je pense que le bug des doubles musiques vients de la, regarder si ca vient de passer deux musiques")
-      this.nextMusic();
+      await this.nextMusic(firstLaunch);
       return;
     }
+
     // Créez un nouvel élément audio
     this.audioElement = new Audio(this.actualMusic?.preview_url);
     // En cas d'erreur lors du chargement de la source audio
     // TODO ca me parait bizarre ca -> verifier comment ca marche. Pour moi ca va du tout la, un listener ca se met dans l'initialize ou 
     // dans l'endroit ou on declare audioElement mais dans un fonction qu'on appelle plusiseurs fois c bizarre
-    this.audioElement.addEventListener('error', (e) => {
+    this.audioElement.addEventListener('error', async (e) => {
       console.error("Erreur lors du chargement de la source audio", e);
-      this.nextMusic(firstLaunch);
+      await this.nextMusic(firstLaunch);
     });
     // Écoutez l'événement "ended" pour réinitialiser le bouton de lecture lorsque la musique est terminée
-    this.audioElement.addEventListener('ended', () => {
-      this.nextMusic();
+    this.audioElement.addEventListener('ended', async () => {
+      await this.nextMusic();
     });
 
     if (this.audioElement) {
       // Ajoutez l'écouteur d'événement "timeupdate" ici
-      this.audioElement.addEventListener("timeupdate", () => {
-        this.updateProgress();
+      this.audioElement.addEventListener("timeupdate", async () => {
+        await this.updateProgress();
       });
     }
-    if (!firstLaunch && !this.audioElement.error)
+    if (!firstLaunch && this.actualMusic.preview_url !== null && !this.audioElement.error)
     {
       // TODO ca rentre jamais la dedans on change jamais firstLaunch a true 
       setTimeout(() => {

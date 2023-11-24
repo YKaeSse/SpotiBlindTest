@@ -52,7 +52,7 @@
       <div class="row justify-content-center">
         <button class="col-5 btn btn-primary mt-2" (click)="nextMusic()" *ngIf="IsFindAll">Son suivant</button>
         <div class="mt-2"></div>
-        <button class="col-5 btn btn-primary mt-2 red1" (click)="nextMusic()" *ngIf="!IsFindAll">Passer le son</button>
+        <button class="col-5 btn btn-primary mt-2 red1" (click)="skipMusic()" *ngIf="!IsFindAll" [disabled]="!skipButtonAvailable">Passer le son</button>
       </div>
 
       <div class="mt-5"></div>
