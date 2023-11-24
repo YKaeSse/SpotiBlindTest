@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { error } from 'console';
 import { UnaryFunction } from 'rxjs';
 
 import { ConfigService } from 'src/app/shared/config.service';
@@ -33,7 +34,7 @@ export class BlindTestComponent{
   totalNumberTracks: number | undefined = 0;
   IsFindSound: boolean = false;
   IsFindArtiste : boolean = false;
-  IsPresque : boolean = false;
+  IsAlmostFind : boolean = false;
   IsFindAll: boolean = this.IsFindArtiste && this.IsFindSound;
   usedTracks: number[] = [];
 
@@ -65,6 +66,11 @@ export class BlindTestComponent{
       console.log(this.playlistTracks)
     }
 
+    if (this.totalNumberTracks === 0)
+    {
+      throw new Error("La playlist choisit est vide");
+    }
+
     await this.nextMusic(true);
 
     const input = document.getElementById('InputMusic');
@@ -83,7 +89,7 @@ export class BlindTestComponent{
   findMusic(): void {
     let input = document.getElementById('InputMusic') as HTMLInputElement;
     let value: string = input.value.trim().toLowerCase();
-    this.IsPresque = false;
+    this.IsAlmostFind = false;
     let DesactivePresque = false;
     if (!value || !input.value || input.value === "") {
       return;
@@ -125,7 +131,7 @@ export class BlindTestComponent{
     if (DesactivePresque === false ) {
       if (!this.IsFindSound  && this.currentMusicName && this.isStringSimilar(this.currentMusicName.toLowerCase(), value, 0.70)|| presqueArtist)
       {
-        this.IsPresque = true;
+        this.IsAlmostFind = true;
         console.log("Presque !!")
       }
     }
@@ -225,7 +231,7 @@ export class BlindTestComponent{
       try {
         this.audioElement.play();
       } catch (error) {
-        console.log("error in musique")
+        console.error("playMusic(): Error when trying to play music ")
         this.nextMusic();
       }
       
@@ -251,12 +257,13 @@ export class BlindTestComponent{
     this.IsFindAll = false;
     this.IsFindSound = false;
     this.IsFindArtiste = false;
-    this.IsPresque = false;
+    this.IsAlmostFind = false;
 
     // on doit gerer si c'est out of range
     if (this.totalNumberTracks && this.configService.actualNumber >= this.totalNumberTracks )
     {
       // fin de la playlist
+      // TODO mettre un message d'info sur l'ecran que la playlist est finit 
       this.router.navigate(['/home']);
       return;
     }
@@ -275,9 +282,10 @@ export class BlindTestComponent{
     // recuperer la musique suivante de la playlist
     /// changer le this.audioElement son id
     this.musicTrack = this.playlistTracks?.items[randomIndex].track.id;
-    this.currentMusicName = undefined;
     this.currentMusicName =  this.playlistTracks?.items[randomIndex].track.name;
+
     // remove - and ( because he change the name of music and we don't find it
+    // ex : coucou - COLOR SHOW -> coucou ou Salut (feat. Nekfeu) -> Salut
     if (this.currentMusicName)
     {
       for (let i = 0; i < this.currentMusicName.length; i++)
@@ -292,10 +300,12 @@ export class BlindTestComponent{
 
     console.log(this.currentMusicName);
 
+    // charge les artists de la musique en question
     let tmp = this.playlistTracks?.items[randomIndex].track.artists;
     this.currentMusicArtists = undefined;
     if (tmp)
     {
+      // TODO pas compris pk ya cette condition si on la set au dessus a undefined
       if (this.currentMusicArtists === undefined)
       {
         this.currentMusicArtists = [];
@@ -311,16 +321,20 @@ export class BlindTestComponent{
     this.configService.actualNumber += 1;
     // Récupérez l'URL de la musique que vous souhaitez jouer
     this.actualMusic = await this.getMusicPlayable();
+    console.log("l.324 actualMusic :", this.actualMusic, " | id de la musique :", this.musicTrack)
     if (this.actualMusic === undefined)
     {
+      console.log("je pense que le bug des doubles musiques vients de la, regarder si ca vient de passer deux musiques")
       this.nextMusic();
       return;
     }
     // Créez un nouvel élément audio
     this.audioElement = new Audio(this.actualMusic?.preview_url);
     // En cas d'erreur lors du chargement de la source audio
+    // TODO ca me parait bizarre ca -> verifier comment ca marche. Pour moi ca va du tout la, un listener ca se met dans l'initialize ou 
+    // dans l'endroit ou on declare audioElement mais dans un fonction qu'on appelle plusiseurs fois c bizarre
     this.audioElement.addEventListener('error', (e) => {
-      console.log("Erreur lors du chargement de la source audio", e);
+      console.error("Erreur lors du chargement de la source audio", e);
       this.nextMusic(firstLaunch);
     });
     // Écoutez l'événement "ended" pour réinitialiser le bouton de lecture lorsque la musique est terminée
@@ -336,6 +350,7 @@ export class BlindTestComponent{
     }
     if (!firstLaunch && !this.audioElement.error)
     {
+      // TODO ca rentre jamais la dedans on change jamais firstLaunch a true 
       setTimeout(() => {
         // Code to be executed after 1 second
         this.togglePlayPause();
