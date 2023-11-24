@@ -9,8 +9,8 @@ import { PlaylistTracks, Track } from 'src/assets/code/ObjectsFormat'
 
 @Component({
   selector: 'app-blind-test',
-  templateUrl: './blind-test.component.html',
-  styleUrls: ['./blind-test.component.scss']
+  templateUrl: './blind-test-new.component.html',
+  styleUrls: ['./blind-test-new.component.scss']
 })
 export class BlindTestComponent{
   constructor(private router: Router,
