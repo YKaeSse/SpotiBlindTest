@@ -4,8 +4,6 @@ const path = require('path');
 
 const app = express();
 
-
-
 // Définir le dossier des fichiers de développement
 app.use(express.static(path.join(__dirname, 'dist/inst-api')));
 
@@ -13,6 +11,7 @@ app.use(express.static(path.join(__dirname, 'dist/inst-api')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/inst-api', 'index.html'));
 });
+
 
 // Démarrez le serveur sur le port de votre choix
 const port = 3007;
