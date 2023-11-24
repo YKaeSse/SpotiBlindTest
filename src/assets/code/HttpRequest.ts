@@ -2,8 +2,6 @@
 import { UserProfile, Search, Track, UserPlaylists, PlaylistTracks,PlaylistTracksItem} from 'src/assets/code/ObjectsFormat'
 import { redirectToAuthCodeFlow} from 'src/assets/code/token'
 import { ConfigService } from 'src/app/shared/config.service';
-import { elementAt } from 'rxjs';
-import { off } from 'process';
 
 const config = new ConfigService();
 
@@ -61,6 +59,7 @@ export async function getPlaylistTracks2(code: string, playlistID: string): Prom
 
     const currentTracks = result.items;
     requestUrl = result.next;
+    console.log(requestUrl)
     tracks.push(...currentTracks);
     
   } while (result.next !== null)
@@ -70,8 +69,6 @@ export async function getPlaylistTracks2(code: string, playlistID: string): Prom
   console.log(PlaylistTracks)
   return {tracks: PlaylistTracks, totalTrack: result.total};
 }
-
-// `https://api.spotify.com/v1/playlists/${playlistID}/tracks?offset=${offset}&limit=${limit}`
 
 export async function getPlaylistTracks(code: string, playlistID: string): Promise<{ tracks: PlaylistTracks; totalTrack: number; }>  {
   let tracks: PlaylistTracksItem[] = [];
@@ -100,9 +97,8 @@ export async function getPlaylistTracks(code: string, playlistID: string): Promi
   const limitMax = (Math.floor(total / 50) + 1) * 50;
   for (let offset = 50; offset < limitMax; offset += 50)
   {
-    let limit = offset + 50;
-    requestUrl = `https://api.spotify.com/v1/playlists/${playlistID}/tracks?offset=${offset}&limit=${limit}`
-    const promise = fetch(requestUrl, {
+    requestUrl = `https://api.spotify.com/v1/playlists/${playlistID}/tracks?offset=${offset}&limit=50`
+    promises.push(fetch(requestUrl, {
       method: "GET",
       headers: { Authorization: `Bearer ${code}` }
     }).then(async (res) => {
@@ -115,14 +111,14 @@ export async function getPlaylistTracks(code: string, playlistID: string): Promi
       } 
         const data = await res.json();
         tracks.push(...data.items);
-      });
+      }));
   }
 
   await Promise.all(promises);
 
   const PlaylistTracks: PlaylistTracks = { "items": tracks } as PlaylistTracks;
   console.log(PlaylistTracks);
-  return { tracks: PlaylistTracks, totalTrack: tracks.length }; 
+  return { tracks: PlaylistTracks, totalTrack: total}; 
 }
 
 /* 5HCGrYR7g9u2X9Ju83yQLm */
@@ -137,13 +133,49 @@ export async function getPlayable(code: string, searchText: string): Promise<Tra
 }
 
 export async function getUserPlaylists(code: string, offset: number): Promise<UserPlaylists> {
+  let tracks: PlaylistTracksItem[] = [];
+  let requestUrl = `https://api.spotify.com/v1/me/playlists?limit=50&offset=${offset}`;
 
-  const result = await fetch(`https://api.spotify.com/v1/me/playlists?limit=50&offset=${offset}`, {
+  //first 50 Playlists
+  
+  const response = await fetch(`https://api.spotify.com/v1/me/playlists?limit=50&offset=${offset}`, {
       method: "GET", headers: { Authorization: `Bearer ${code}` }
   });
-  if (result.status === 401) {
-    redirectToAuthCodeFlow(config.clientId);
+  if (!response.ok) {
+    console.log(response)
+    if (response.status === 401) {
+      redirectToAuthCodeFlow(config.clientId);
+    }
+    throw new Error(`Failed to get Playlists`);
   }
-  return await result.json();
+  const result = await response.json();
+  const currentPlaylist = result.items;
+  const total = result.total;
+
+  //async all rest Playlist
+  const promises: Promise<void>[] = [];
+  const limitMax = (Math.floor(total / 50) + 1) * 50;
+  for (let offset = 50; offset < limitMax; offset += 50)
+  {
+    requestUrl = `https://api.spotify.com/v1/me/playlists/?offset=${offset}&limit=50`
+    promises.push(fetch(requestUrl, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${code}` }
+    }).then(async (res) => {
+      if (!res.ok) {
+        if (res.status === 401) {
+          redirectToAuthCodeFlow(config.clientId);
+        }
+        console.log(res);
+        throw new Error(`Failed to get Playlists`);
+      } 
+        const data = await res.json();
+        currentPlaylist.push(...data.items);
+      }));
+  }
+
+  await Promise.all(promises);
+  const Playlists: UserPlaylists = { "items": currentPlaylist } as UserPlaylists;
+  return Playlists;
 }
 

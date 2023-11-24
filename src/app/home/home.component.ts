@@ -30,13 +30,7 @@ export class HomeComponent {
     let offset : number = 0;
     let PlaylistUser : UserPlaylists = await getUserPlaylists(this.configService.access_token,offset);
     let playlists = PlaylistUser.items;
-    console.log("Nombre de playlists totales " + PlaylistUser.total)
-    while (PlaylistUser.next != null)
-    {
-      offset += PlaylistUser.limit;
-      PlaylistUser = await getUserPlaylists(this.configService.access_token,offset);
-      playlists = playlists.concat(PlaylistUser.items);
-    }
+    console.log("Nombre de playlists totales " + playlists.length)
     for (const playlist of playlists) {
       const params = new URLSearchParams();
       params.append("id", playlist.id);
