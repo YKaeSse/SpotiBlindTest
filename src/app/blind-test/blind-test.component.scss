@@ -1,52 +1,153 @@
 
-
-
-.custom-background {
-  background:  linear-gradient(140deg, #1DB954 0%, #191414 90%); /*#202124;*/ /* linear-gradient(180deg, #1DB954  10%, #191414  100%); */
+* {
+    font-size: 22px;
+    font-family: 'Poppins', sans-serif;
+    color: #e7e7e7;
+}
+.container {
+    max-width: 100vw;
+    margin: 0;
+    padding: 0;
+    background-color: #25262d;
+    display: flex;
+    flex-direction: column;
 }
 
-.blue {
-  background-color: rgb(10, 88, 202);
+.input-music {
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-around;
 }
 
-
-.custom-icon {
-  font-size: 50px; /* Adjust the size as needed */
+.input-music input {
+    border-radius: 5px;
+    width: 60%;
+}
+.input-music div {
+    cursor: pointer;
+    user-select: none;
+    background-color: #5d6066;
+    width: 20%;
+    text-align: center;
+    border-radius: 5px;
 }
 
-.custom-icon-little {
-  font-size: 35px; /* Adjust the size as needed */
+.music-player {
+    margin: 20px;
+    padding: 10px;
+    background-color: #5d6066;
+    border-radius: 10px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+.music-player i {
+    
+}
+.music-player div {
+    margin-left: 10px;
+    background-color: white;
+    height: 5px;
+    width: 20%;
 }
 
 .gray {
-  background-color: rgb(220,220,220);
+    background-color: rgb(220,220,220);
 }
-
+  
 .green {
-  background-color: rgb(50,205,50);
+    background-color: rgb(50,205,50);
 }
 
-.scrollable-container {
-  max-height: 30vh; /* Définissez la hauteur maximale souhaitée pour afficher deux éléments */
-  overflow-y: scroll; /* Ajoute une barre de défilement verticale si nécessaire */
-  overflow-x: hidden;
+
+.find-items {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.find-items > div {
+    margin: 10px;
+    padding: 10px;
+    display: flex;
+    border-radius: 5px;
+    align-items: center;
+    text-align: center;
+    min-width: 180px;
+    width: 30%;
+    max-width: 500px;
 }
 
-.height30 {
-  height: 50vh;
-  overflow-y: scroll; /* Ajoute une barre de défilement verticale si nécessaire */
-  overflow-x: hidden;
+.find-items > div > i {
+    margin-right: 10px;
+    color: #25262d;
 }
 
-.red1 {
-  background-color: rgb(247, 44, 44);
-  border: red;
+.find-items > div > p {
+    color: #25262d;
+}
+
+p {
+    margin: 0;
+    padding: 0;
+}
+
+.button-items {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.button-items > div {
+    cursor: pointer;
+    user-select: none;
+    background-color: #5d6066;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+.songs-items {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #5d6066;
 
 }
 
-.red1:hover {
-  background-color: rgb(153, 6, 6);
-  border: rgb(153, 6, 6);
+.songs-items > a {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    text-align: center;
+    flex-direction: row;
+    background-color: #e7e7e7;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+}
 
 
+.songs-items > a > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.songs-items > a > div > p {
+    font-size: 20px;
+    color: #25262d;
+}
+
+
+.songs-items > a > .logo-song  {
+    display: flex;
+    align-self: center;
+}
+.songs-items > a > div > i {
+    color: #25262d;
 }
