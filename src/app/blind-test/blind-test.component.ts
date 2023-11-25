@@ -38,8 +38,8 @@ export class BlindTestComponent{
 
   colorArtist: string = "gray";
   colorTitle: string = "gray";
-  Artist: string = "Artist : ?";
-  Title: string = "Title : ?";
+  Artist: string = "";
+  Title: string = "";
 
   items: any[] = []; // Déclaration du tableau de données
 
