@@ -21,6 +21,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 5px;
 }
 
 .input-music input {
@@ -79,16 +80,27 @@
     align-items: center;
 }
 .music-player i {
-    font-size: 30px !important;   
-    margin: 10px;
+    font-size: 30px !important;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     cursor: pointer;
     user-select: none;
+    text-align: center;
+    flex: 5%;
 }
-.music-player div {
-    margin-left: 10px;
+.music-player > div {
+    flex: 95%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 5px;
+    margin-right: 10px;
+} 
+.music-player > div > div {
     background-color: #e7e7e7;
     height: 5px;
-    width: 20%;
+    border-radius: 2px;
 }
 
 

@@ -5,7 +5,9 @@
         <div class="music-player-and-skip">
             <div class="music-player">
                 <i (click)="togglePlayPause()" class=" {{PlayOrPause}}" id="playButton" ></i>
-                <div [style.width.%]="currentProgress"></div>  
+                <div>
+                    <div [style.width.%]="currentProgress"></div>
+                </div>
             </div>
             <span (click)="nextMusic()" class="material-symbols-outlined">skip_next</span>
         </div>
