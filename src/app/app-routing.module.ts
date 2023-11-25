@@ -4,6 +4,7 @@ import { HomeComponent } from './home/home.component';
 import { BlindTestComponent } from './blind-test/blind-test.component';
 import { SearchMusicComponent } from './search-music/search-music.component';
 import { CallbackComponent } from './callback/callback.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' }, // Default route
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: 'callback', component: CallbackComponent },
   { path: 'blindtest', component: BlindTestComponent },
   { path: 'searchmusic', component: SearchMusicComponent},
+  { path: '**', component: PageNotFoundComponent },
   // add routes if we want
 ];
 

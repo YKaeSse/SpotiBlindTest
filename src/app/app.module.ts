@@ -10,6 +10,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { BlindTestComponent } from './blind-test/blind-test.component';
 import { SearchMusicComponent } from './search-music/search-music.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { SearchMusicComponent } from './search-music/search-music.component';
     NavbarComponent,
     FooterComponent,
     BlindTestComponent,
-    SearchMusicComponent
+    SearchMusicComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,30 @@
+
+
+// Get les tracks d'une playlist en synchrone
+export async function getPlaylistTracks(code: string, playlistID: string): Promise<{ tracks: PlaylistTracks; totalTrack: number; }>  
+{
+  let response:Response;
+  let tracks:PlaylistTracksItem[] = [];
+  let requestUrl = `https://api.spotify.com/v1/playlists/${playlistID}/tracks?limit=50`;
+  let result;
+  do 
+  {
+    response = await fetch(requestUrl, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${code}` }
+    });
+    CheckStatus(result);
+    result = await response.json();
+
+    const currentTracks = result.items;
+    requestUrl = result.next;
+    console.log(requestUrl)
+    tracks.push(...currentTracks);
+    
+  } while (result.next !== null)
+
+  
+  const PlaylistTracks: PlaylistTracks = { "items": tracks } as PlaylistTracks;
+  console.log(PlaylistTracks)
+  return {tracks: PlaylistTracks, totalTrack: result.total};
+}
