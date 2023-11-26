@@ -113,7 +113,13 @@ export class BlindTestComponent{
         if (this.isStringSimilar(artist.toLowerCase(), value, 0.70)) {
           this.IsFindArtiste = true;
           DesactivePresque = true;
-          this.Artist =  artist;
+          let artistsFound = "";
+          for (let i = 0; i < this.currentMusicArtists.length - 1; i++)
+          {
+            artistsFound += this.currentMusicArtists[i] + ", ";
+          }
+          artistsFound += this.currentMusicArtists[this.currentMusicArtists.length - 1];
+          this.Artist =  artistsFound;
           this.colorArtist = "green";
           break;
         }
@@ -121,6 +127,7 @@ export class BlindTestComponent{
     }
 
     // Afficher un message si la valeur entrée est proche
+    // TODO ca mqfvhee pas
     console.log(DesactivePresque)
     let presqueArtist = false;
     if (!this.IsFindArtiste && this.currentMusicArtists) {
@@ -253,11 +260,17 @@ export class BlindTestComponent{
     
     if (this.actualMusic !== undefined && this.actualMusic.preview_url !== null)
     {
+      let artistsFound = "";
+      for (let i = 0; i < this.actualMusic.artists.length - 1; i++)
+      {
+        artistsFound += this.actualMusic.artists[i].name + ", ";
+      }
+      artistsFound += this.actualMusic.artists[this.actualMusic.artists.length - 1].name;
       this.items.unshift({
         songUrl: this.actualMusic.external_urls.spotify,
         imagePath:  this.actualMusic.album.images[0].url,
         MusicName: this.actualMusic.name,
-        ArtistName: this.actualMusic.artists[0].name
+        ArtistName: artistsFound
       });
     }
     if (!firstLaunch)
