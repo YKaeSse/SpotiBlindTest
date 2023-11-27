@@ -3,6 +3,8 @@ import { redirectToAuthCodeFlow, getAccessToken} from 'src/assets/code/token'
 import { fetchProfile, getUserPlaylists} from 'src/assets/code/HttpRequest'
 import { UserProfile, Search, UserPlaylists} from 'src/assets/code/ObjectsFormat'
 import { ConfigService } from 'src/app/shared/config.service';
+const colorThieff = require('colorthief');
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -55,5 +57,9 @@ export class HomeComponent {
     }
   }
 
+  async getGlow(imagePath: string) {
+    const vibrantColor = await colorThieff.getColor(imagePath);
+    console.log('Couleur dominante:', vibrantColor);
+  }
 
 }

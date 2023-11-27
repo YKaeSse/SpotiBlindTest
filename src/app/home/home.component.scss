@@ -28,6 +28,21 @@
   padding: 10px;
 }
 
+.glow {
+  transition: 
+    box-shadow 1s,
+    transform 0.5s,
+    z-index 0.5s;
+}
+.glow:hover
+{
+  z-index: 2;
+  transform: scale(1.05);
+  box-shadow:
+  0 0 30px 0px #fff,
+  0 0 50px 5px #f2ff00;
+}
+
 .playlists {
   display: flex;
   flex-wrap: wrap;
