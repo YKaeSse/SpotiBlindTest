@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-  disabled : string = "disabled";
+  isOpen : boolean = false;
+
+  menuInteraction() {
+    this.isOpen = this.isOpen ? false : true;
+  }
 }

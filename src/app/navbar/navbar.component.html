@@ -1,12 +1,34 @@
 <div class="container">
-
-  <a class="navbar-title" href="/home">
-    <img class="logo" src="../../assets/img/SpotiBlindTest2.png" alt="Logo SpotiBlindTest">
-    <p class="title-text">SpotiBlindTest</p>
-  </a>
   
-  <div class="navbar-link">
-    <a class="nav-link active" aria-current="page" href="/home">BlindTest</a>
-    <a class="nav-link" href="/searchmusic">SearchMusic</a>
+
+  <div class="pc-menu">
+    <a class="navbar-title" href="/home">
+      <img class="logo" src="../../assets/img/SpotiBlindTest2.png" alt="Logo SpotiBlindTest">
+      <p class="title-text">SpotiBlindTest</p>
+    </a>
+    
+    <div class="navbar-link">
+      <a class="nav-link active" aria-current="page" href="/home">BlindTest</a>
+      <a class="nav-link" href="/searchmusic">SearchMusic</a>
+    </div>
   </div>
+  
+  <div class="mobile-menu">
+    <div class="header-mobile-menu">
+      <a class="navbar-title" href="/home">
+        <img class="logo" src="../../assets/img/SpotiBlindTest2.png" alt="Logo SpotiBlindTest">
+        <p class="title-text">SpotiBlindTest</p>
+      </a>
+      <span  (click)="menuInteraction()" class="material-symbols-outlined">menu</span>
+    </div>
+  
+    <div class="content-mobile-menu" [ngStyle]="{'display': isOpen ? 'flex' : 'none'}">
+      <a class="nav-link active" aria-current="page" href="/home">BlindTest</a>
+      <a class="nav-link" href="/searchmusic">SearchMusic</a>
+    </div>
+  </div>
+
+
+ 
+
 </div>
