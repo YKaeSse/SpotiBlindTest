@@ -3,7 +3,7 @@ import { redirectToAuthCodeFlow, getAccessToken} from 'src/assets/code/token'
 import { fetchProfile, getUserPlaylists} from 'src/assets/code/HttpRequest'
 import { UserProfile, Search, UserPlaylists} from 'src/assets/code/ObjectsFormat'
 import { ConfigService } from 'src/app/shared/config.service';
-const colorThieff = require('colorthief');
+var Vibrant = require('node-vibrant');
 
 @Component({
   selector: 'app-home',
@@ -19,6 +19,8 @@ export class HomeComponent {
   imagePath: string = "";
   PlaylistName: string = "";
   LienClick: string = "";
+
+  PersonnalizeGlow: any = "";
 
   items: any[] = []; // Déclaration du tableau de données
 
@@ -57,9 +59,20 @@ export class HomeComponent {
     }
   }
 
-  async getGlow(imagePath: string) {
-    const vibrantColor = await colorThieff.getColor(imagePath);
-    console.log('Couleur dominante:', vibrantColor);
-  }
+  async getGlow(event: MouseEvent, imagePath: string) {
+    const element = event.target as HTMLElement;
 
+    if (element) {
+      Vibrant.from(imagePath)
+        .getPalette()
+        .then((palette: any) => {
+          const dominantColor = palette.Vibrant.getHex();
+          console.log('Couleur dominante:', dominantColor);
+          document.documentElement.style.setProperty('--theme-color-1', dominantColor);
+        })
+        .catch((error: Error) => {
+          console.error("Erreur lors de l'extraction des couleurs:", error.message);
+        });
+      }
+  }
 }

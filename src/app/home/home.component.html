@@ -4,9 +4,12 @@
         <div>Le blind test qui teste vos connaissances sur vos playlists.</div>
     </div>
     <div class="playlists" id="playlistScroll">
-            <a class="playlist-item glow" href="{{item.playlistUrl}}" *ngFor="let item of items" (click)="resetCount()" (mouseover)="getGlow(item.imagePath)">
+            <a class="playlist-item glow" href="{{item.playlistUrl}}" *ngFor="let item of items" (click)="resetCount()" (mouseover)="getGlow($event, item.imagePath)">
                     <img src="{{item.imagePath}}" alt="{{item[0]}}" class="playlist-image">
                     <p class="playlist-name">{{item.PlaylistName}}</p>
             </a>
     </div>
+</div>
+
+<div class="container-shadow">
 </div>

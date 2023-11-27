@@ -2,7 +2,6 @@
 import { UserProfile, Search, Track, UserPlaylists, PlaylistTracks,PlaylistTracksItem} from 'src/assets/code/ObjectsFormat'
 import { redirectToAuthCodeFlow} from 'src/assets/code/token'
 import { ConfigService } from 'src/app/shared/config.service';
-import { resolve } from 'path';
 
 const config = new ConfigService();
 
