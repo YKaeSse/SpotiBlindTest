@@ -1,0 +1,36 @@
+
+.container {
+    width: 100%;
+    height: 6vh;
+    background-color: #13151e;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 50px;
+    border-bottom: 1px solid #1e202f;
+}
+
+.navbar-title {
+    padding-left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+a {
+    text-decoration: none;
+    color: white;
+    padding: 10px;
+    margin: 0;
+}
+.logo {
+    width: 40px;
+    height: 40px;
+}
+.title-text {
+    padding: 10px;
+}
+.navbar-link {
+    padding-right: 20px;
+    display: flex;
+    justify-content: center;
+}

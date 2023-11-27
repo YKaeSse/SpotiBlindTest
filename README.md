@@ -17,7 +17,6 @@ Amusez-vous bien sur SpotiBlindTest !
 
 SpotiBlindTest utilise plusieurs frameworks :
 - [Angular](https://angular.io/)
-- [Boostrap](https://getbootstrap.com/)
 
 ## Installation
 
