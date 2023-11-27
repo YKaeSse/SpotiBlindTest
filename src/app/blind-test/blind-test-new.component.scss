@@ -59,7 +59,7 @@
     justify-content: center;
     align-items: center;
 }
-.music-player-and-skip span {
+#skip_song {
     margin-left: 10px;
     padding: 17px;
     border-radius: 10px;
@@ -71,7 +71,6 @@
 .music-player {
     background-color: #303138;
     border-radius: 10px;
-    align-self: flex-start;
     display: flex;
     width: 85%;
     min-width: 200px;
@@ -79,7 +78,7 @@
     justify-content: flex-start;
     align-items: center;
 }
-.music-player i {
+.music-player span {
     font-size: 30px !important;
     margin-left: 10px;
     margin-top: 10px;
@@ -124,11 +123,11 @@
     max-width: 50%;
 }
 
-.find-items > div > i {
+.find-items > div > span {
     color: #e4e4e4;
     padding-left: 15px;
     padding-right: 10px;
-    font-size: 18px;
+    font-size: 23px;
 }
 
 .find-items > div > p {
@@ -241,11 +240,11 @@ p {
 }
 
 
-.songs-items > div > a > i {
+.songs-items > div > a > span {
     display: flex;
     align-self: center;
     margin-right: 10px;
 }
-.songs-items > div > a > i {
+.songs-items > div > a > span {
     color: #25262d;
 }

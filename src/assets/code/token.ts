@@ -1,5 +1,5 @@
-const url = "https://spotiblindtest.emapse.com/callback";
-//const url = "http://localhost:3007/callback";
+//const url = "https://spotiblindtest.emapse.com/callback";
+const url = "http://localhost:3007/callback";
 
 
 export async function redirectToAuthCodeFlow(clientId: string) {

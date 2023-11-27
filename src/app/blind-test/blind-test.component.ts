@@ -17,7 +17,7 @@ import { PlaylistTracks, Track } from 'src/assets/code/ObjectsFormat'
 export class BlindTestComponent{
   constructor(private router: Router,
               private configService: ConfigService) {}
-  PlayOrPause: string = "bi-play-fill";
+  PlayOrPause: string = "play_arrow";
   isplayButton : boolean = false;
 
 
@@ -207,13 +207,13 @@ export class BlindTestComponent{
   togglePlayPause(): void {
 
     if (!this.isplayButton) {
-      this.PlayOrPause = "bi-pause";
+      this.PlayOrPause = "pause";
       this.isplayButton = true;
       this.playMusic();
     }
     else
     {
-      this.PlayOrPause = "bi-play-fill";
+      this.PlayOrPause = "play_arrow";
       this.isplayButton = false;
       this.pauseMusic();
     }
@@ -387,7 +387,7 @@ export class BlindTestComponent{
 
   musicEnd(): void  {
     this.isplayButton = false;
-    this.PlayOrPause = 'bi-play-fill';
+    this.PlayOrPause = 'play_arrow';
     this.currentProgress = 0;
     this.colorArtist = "gray";
     this.colorTitle = "gray";
@@ -405,7 +405,7 @@ export class BlindTestComponent{
     if (this.audioElement) {
       this.audioElement.pause();
       this.isplayButton = false;
-      this.PlayOrPause = 'bi-play-fill';
+      this.PlayOrPause = 'play_arrow';
       setTimeout(() => {
         if (this.audioElement) {
           this.audioElement.currentTime = 0; // Réinitialiser la position de lecture

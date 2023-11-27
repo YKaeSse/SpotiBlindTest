@@ -1,23 +1,23 @@
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
 
 <div class="container">
     <div class="music-player-and-find-items">
         <div class="music-player-and-skip">
             <div class="music-player">
-                <i (click)="togglePlayPause()" class=" {{PlayOrPause}}" id="playButton" ></i>
+                <span (click)="togglePlayPause()" class="material-symbols-outlined" id="playButton" >{{PlayOrPause}}</span>
                 <div>
                     <div [style.width.%]="currentProgress"></div>
                 </div>
             </div>
-            <span (click)="nextMusic()" class="material-symbols-outlined">skip_next</span>
+            <span id="skip_song" (click)="nextMusic()" class="material-symbols-outlined">skip_next</span>
         </div>
         <div class="find-items">
             <div class="{{colorArtist}}"> <!--  *ngIf="IsFindArtiste" -->
-                    <i class="bi-file-earmark-person-fill" style="line-height: 50px;"></i>
+                    <span class="material-symbols-outlined" style="line-height: 50px;">artist</span>
                     <p >{{Artist}}</p>
             </div>
             <div class="{{colorTitle}}"> <!-- *ngIf="IsFindSound"-->
-                    <i class="bi-music-note-beamed" style="line-height: 50px;"></i>
+                    <span class="material-symbols-outlined" style="line-height: 50px;">music_note</span>
                     <p >{{Title}}</p>
             </div>
         </div>
