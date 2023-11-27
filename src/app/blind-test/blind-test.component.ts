@@ -15,6 +15,7 @@ import { PlaylistTracks, Track } from 'src/assets/code/ObjectsFormat'
   styleUrls: ['./blind-test-new.component.scss']
 })
 export class BlindTestComponent{
+await: any;
   constructor(private router: Router,
               private configService: ConfigService) {}
   PlayOrPause: string = "play_arrow";
@@ -247,13 +248,16 @@ export class BlindTestComponent{
     }
   }
 
-  skipMusic()
+  async skipMusic()
   {
-    this.skipButtonAvailable = false;
-    setTimeout(async () => {
-      await this.nextMusic();
-      this.skipButtonAvailable = true;
-    }, 1000);
+    
+    if (this.skipButtonAvailable) {
+      this.skipButtonAvailable = false;
+      setTimeout(async () => {
+        await this.nextMusic();
+        this.skipButtonAvailable = true;
+      }, 1000);
+    }
   }
 
   async nextMusic(firstLaunch: boolean = false) {

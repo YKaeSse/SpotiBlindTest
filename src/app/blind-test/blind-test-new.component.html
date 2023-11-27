@@ -9,7 +9,7 @@
                     <div [style.width.%]="currentProgress"></div>
                 </div>
             </div>
-            <span id="skip_song" (click)="nextMusic()" class="material-symbols-outlined">skip_next</span>
+            <span id="skip_song" (click)="skipMusic()" class="material-symbols-outlined">skip_next</span>
         </div>
         <div class="find-items">
             <div class="{{colorArtist}}"> <!--  *ngIf="IsFindArtiste" -->
@@ -33,7 +33,7 @@
         <div class="song-item">
             <a href="{{item.songUrl}}"  *ngFor="let item of items" target="_blank">
                 <div>
-                    <img src="{{item.imagePath}}" alt="Titre de la chanson"  style="width: 80px; height: 80px;">
+                    <img src="{{item.imagePath}}" alt="Titre de la chanson"  style="width: 80px; height: 80px; object-fit: cover;">
                     <div >
                         <p >{{item.MusicName}}</p>
                         <p >{{item.ArtistName}}</p>
