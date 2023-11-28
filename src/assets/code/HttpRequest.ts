@@ -48,6 +48,7 @@ export async function fetchProfile(code: string): Promise<UserProfile> {
   }
 
 
+// TODO refaire cett requete le nom n'a pas de sens sur la facon dont on l'utilise
 export async function getMusic(code: string, searchText: string): Promise<Search> {
   const params = new URLSearchParams();
   params.append("q", searchText);
@@ -95,7 +96,7 @@ export async function getPlaylistTracks(code: string, playlistID: string): Promi
   await Promise.all(promises);
 
   const PlaylistTracks: PlaylistTracks = { "items": tracks } as PlaylistTracks;
-  console.log(PlaylistTracks);
+  //console.log(PlaylistTracks);
   return { tracks: PlaylistTracks, totalTrack: total}; 
 }
 
@@ -105,15 +106,13 @@ export async function getPlayable(code: string, idMusic: string): Promise<Track>
       method: "GET", headers: { Authorization: `Bearer ${code}` }
   });
   CheckStatus(result);
-  return await result.json() ;
+  return await result.json();
 }
 
 export async function getUserPlaylists(code: string, offset: number): Promise<UserPlaylists> {
-  let tracks: PlaylistTracksItem[] = [];
   let requestUrl = `https://api.spotify.com/v1/me/playlists?limit=50&offset=${offset}`;
 
-  //first 50 Playlists
-  
+  //first 50 Playlists 
   const response = await fetch(`https://api.spotify.com/v1/me/playlists?limit=50&offset=${offset}`, {
       method: "GET", headers: { Authorization: `Bearer ${code}` }
   });
@@ -137,8 +136,22 @@ export async function getUserPlaylists(code: string, offset: number): Promise<Us
         currentPlaylist.push(...data.items);
       }));
   }
-
   await Promise.all(promises);
   const Playlists: UserPlaylists = { "items": currentPlaylist } as UserPlaylists;
   return Playlists;
+}
+
+export async function getSearch(inputSearch: string): Promise<Search> {
+  const queryString = new URLSearchParams(inputSearch).toString();
+  const params = new URLSearchParams();
+  params.append("q", queryString); // je crois que ca fait la ligne queryString tout seul 
+  params.append("type", "track");
+  params.append("type", "album");
+
+  const result = await fetch(`https://api.spotify.com/v1/tracks/${params}`, {
+      method: "GET", headers: { Authorization: `Bearer ${config.access_token}` }
+  });
+  CheckStatus(result);
+
+  return await result.json();
 }

@@ -302,6 +302,7 @@ await: any;
       this.configService.actualNumber = 0; // Réinitialiser la valeur de actualNumber
     }
 
+    // TODO changer sur les derniers sons ca peut etre extremement long !!!
     let randomIndex = Math.floor(Math.random() * (this.playlistTracks ? this.playlistTracks?.items.length : 0));
     while (this.usedTracks.includes(randomIndex)) {
       randomIndex = Math.floor(Math.random() * (this.playlistTracks ? this.playlistTracks.items.length : 0));
@@ -353,7 +354,7 @@ await: any;
     if (this.actualMusic === undefined || this.actualMusic.preview_url === null)
     {
       // le preview de 30 sec est pas dispo donc on skip sans le mettre dans l'historique
-      console.log("je pense que le bug des doubles musiques vients de la, regarder si ca vient de passer deux musiques")
+      console.log(this.actualMusic?.name,"id:", this.actualMusic?.id ,"n'a pas de preview url. Passe à la musique suivante")
       await this.nextMusic(firstLaunch);
       return;
     }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { redirectToAuthCodeFlow, getAccessToken} from 'src/assets/code/token'
-import { fetchProfile, getUserPlaylists} from 'src/assets/code/HttpRequest'
-import { UserProfile, Search, UserPlaylists} from 'src/assets/code/ObjectsFormat'
+import { redirectToAuthCodeFlow, getAccessToken} from 'src/assets/code/token';
+import { fetchProfile, getUserPlaylists} from 'src/assets/code/HttpRequest';
+import { UserProfile, Search, UserPlaylists} from 'src/assets/code/ObjectsFormat';
 import { ConfigService } from 'src/app/shared/config.service';
 var Vibrant = require('node-vibrant');
 
