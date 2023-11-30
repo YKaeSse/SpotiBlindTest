@@ -102,8 +102,13 @@
     border-radius: 2px;
 }
 
-
-
+.almost-find {
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    align-items: center;
+    visibility: var(--hidden);
+}
 
 .find-items {
     display: flex;
@@ -203,7 +208,7 @@ p {
     max-width: 900px;
     min-width: 100px;
     justify-content: space-between;
-    align-items: start;
+    align-items: flex-start;
     text-align: center;
     flex-direction: row;
     background-color: #e7e7e7;
@@ -216,7 +221,7 @@ p {
 .songs-items > div > a > div {
     display: flex;
     flex-direction: row;
-    justify-content: start;
+    justify-content: flex-start;
 }
 .songs-items > div  > a > div > img {
     border-radius: 10px;
@@ -224,8 +229,8 @@ p {
 .songs-items > div > a > div > div {
     display: flex;
     flex-direction: column;
-    justify-content: start;
-    align-items: start;
+    justify-content: flex-start;
+    align-items: flex-start;
     margin-left: 10px;
     margin-right: 10px;
 }

@@ -22,6 +22,8 @@ export class HomeComponent {
 
   PersonnalizeGlow: any = "";
 
+  AllItems: any[] = [];
+  ItemsSortByRecentAdd: any[] = [];
   items: any[] = []; // Déclaration du tableau de données
 
   constructor(private configService: ConfigService) {
@@ -45,6 +47,8 @@ export class HomeComponent {
         PlaylistName: playlist.name.toString()
       });
     }
+    this.AllItems = this.items;
+    this.ItemsSortByRecentAdd = this.items;
  }
   resetCount() {
     this.configService.actualNumber = 0;
@@ -74,5 +78,55 @@ export class HomeComponent {
           console.error("Erreur lors de l'extraction des couleurs:", error.message);
         });
       }
+  }
+
+  oldInput: string = "";
+  onSearchChange(searchValue: any): void {  
+    const value: string = (searchValue.target.value).toLowerCase().replaceAll(" ", "");
+    if (this.oldInput.toLowerCase().replaceAll(" ", "") === value)
+      return;
+    else
+      this.oldInput = value;
+    if (value === "")
+      this.items = this.AllItems;
+    else
+    {
+      this.items = [];
+      this.AllItems.forEach(elt => {
+        const PlaylistName: string = (elt.PlaylistName).toLowerCase().replaceAll(" ", "");
+        if (PlaylistName.includes(value))
+        {
+          console.log(value, PlaylistName)
+          this.items.push(elt);
+        }
+      });
+    }
+  }
+
+  SortBy(by: string, ascendent: boolean)
+  {
+    let lessThan: number = ascendent ? -1 : 1
+    let greaterThan: number = ascendent ? 1 : -1
+    if (by === "name")
+    {
+      this.items = this.items.sort((a, b) => {
+        const nameA = a.PlaylistName.toUpperCase();
+        const nameB = b.PlaylistName.toUpperCase();
+        if (nameA < nameB) {
+          return lessThan;
+        }
+        if (nameA > nameB) {
+          return greaterThan;
+        }
+        return 0;
+      });
+    }
+    else if (by === "recentAdd")
+    {
+      if (ascendent)
+        this.items = this.ItemsSortByRecentAdd;
+      else
+        this.items = this.ItemsSortByRecentAdd.reverse();
+    }
   }
 }

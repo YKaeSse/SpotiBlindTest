@@ -11,8 +11,8 @@ import { PlaylistTracks, Track } from 'src/assets/code/ObjectsFormat'
 
 @Component({
   selector: 'app-blind-test',
-  templateUrl: './blind-test-new.component.html',
-  styleUrls: ['./blind-test-new.component.scss']
+  templateUrl: './blind-test.component.html',
+  styleUrls: ['./blind-test.component.scss']
 })
 export class BlindTestComponent{
 await: any;
@@ -75,19 +75,41 @@ await: any;
     }
 
     await this.nextMusic(true);
-
+    document.documentElement.style.setProperty('--hidden', "hidden");
     const input = document.getElementById('InputMusic');
-      if (input)
-      {
-        input.addEventListener('keyup', (event) => {
-          if (event.key === 'Enter') {
-            // Appeler la fonction souhaitée ici
+    if (input)
+    {
+      input.addEventListener('keyup', (event) => {
+        if (event.key === 'Enter') {
+          if (this.IsFindAll)
+            this.nextMusic()
+          else
             this.findMusic();
-          }
-        });
-      }
+        }
+        if (event.key === 'Space') {
+          let inpute = input as HTMLInputElement;
+          console.log("Space");
+          if (!inpute.value || inpute.value === " " || inpute.value === "")
+            this.togglePlayPause()
+        }
+      });
+    }
   }
 
+  PressSpace(event: any | null): void
+  {
+    let input = event.target as HTMLInputElement;
+    if (!input.value || input.value === " " || input.value === "")
+    {
+      input.value = "";
+      this.togglePlayPause()
+    }
+  }
+
+  PressCtrlEnter(): void
+  {
+    this.skipMusic();
+  }
 
   findMusic(): void {
     let input = document.getElementById('InputMusic') as HTMLInputElement;
@@ -99,13 +121,14 @@ await: any;
     }
 
     console.log(value);
-
     // Comparer avec this.currentMusicName
     if (!this.IsFindSound && this.currentMusicName && this.isStringSimilar(this.currentMusicName.toLowerCase(), value, 0.75)) {
+      console.log("Presque")
       this.IsFindSound = true;
       this.Title = this.currentMusicName;
       this.colorTitle = "green";
       DesactivePresque = true;
+      //document.documentElement.style.setProperty('--hidden', "visible");
     }
 
     // Comparer avec this.currentMusicArtists
@@ -315,6 +338,7 @@ await: any;
 
     // remove - and ( because he change the name of music and we don't find it
     // ex : coucou - COLOR SHOW -> coucou ou Salut (feat. Nekfeu) -> Salut
+    // TODO : probleme Nelick sauvez-moi -> sauvez
     if (this.currentMusicName)
     {
       for (let i = 0; i < this.currentMusicName.length; i++)
@@ -350,7 +374,7 @@ await: any;
     this.configService.actualNumber += 1;
     // Récupérez l'URL de la musique que vous souhaitez jouer
     this.actualMusic = await this.getMusicPlayable();
-    console.log("l.324 actualMusic :", this.actualMusic, " | id de la musique :", this.musicTrack)
+    //console.log("l.324 actualMusic :", this.actualMusic, " | id de la musique :", this.musicTrack)
     if (this.actualMusic === undefined || this.actualMusic.preview_url === null)
     {
       // le preview de 30 sec est pas dispo donc on skip sans le mettre dans l'historique
@@ -400,6 +424,7 @@ await: any;
     this.Title = "Title : ?";
 
   }
+
   pauseMusic(): void {
     if (this.audioElement) {
       this.audioElement.pause();

@@ -11,6 +11,7 @@
             </div>
             <span id="skip_song" (click)="skipMusic()" class="material-symbols-outlined">skip_next</span>
         </div>
+        <div class="almost-find">Test</div>
         <div class="find-items">
             <div class="{{colorArtist}}"> <!--  *ngIf="IsFindArtiste" -->
                     <span class="material-symbols-outlined" style="line-height: 50px;">artist</span>
@@ -24,8 +25,12 @@
     </div>
     
     <div class="input-music">
-        <input type="text"  id="InputMusic" placeholder="Entrez la musique et l'artiste..." value="" autocomplete="off">
+        <input type="text"  id="InputMusic" placeholder="Entrez la musique et l'artiste..." value="" autocomplete="off" (keyup.Space)="PressSpace($event)" (keyup.control.Enter)="PressCtrlEnter()">
         <span (click)="findMusic()" class="material-symbols-outlined">send</span> 
+    </div>
+
+    <div>
+        <button>Trier par</button>
     </div>
 
     <div class="songs-items">
@@ -42,5 +47,4 @@
                 <i class="bi-arrow-up-right-square-fill" ></i>
             </a>
         </div>
-        
 </div>
