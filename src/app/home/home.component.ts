@@ -129,4 +129,19 @@ export class HomeComponent {
         this.items = this.ItemsSortByRecentAdd.reverse();
     }
   }
+
+  private timer: NodeJS.Timeout | null = null;
+  // Fonction qui sera appelée lorsqu'il y a un changement dans la barre de recherche
+  onInputChange(text: string): void {
+    // Si un délai est déjà en cours, le réinitialiser
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+
+    // Définir un nouveau délai
+    this.timer = setTimeout(() => {
+      // Fonction à exécuter après le délai
+      //this.envoyerRequeteApi(text);
+    }, 1000); // 1000 millisecondes (1 seconde) de délai, ajustez selon vos besoins
+  }
 }
