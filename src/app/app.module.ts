@@ -21,12 +21,12 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     FooterComponent,
     BlindTestComponent,
     SearchMusicComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule // add this lib to use ngModel
+    FormsModule, // add this lib to use ngModel
   ],
   providers: [],
   bootstrap: [AppComponent]
