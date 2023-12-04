@@ -111,7 +111,6 @@ export async function getPlayable(code: string, idMusic: string): Promise<Track>
 
 export async function getUserPlaylists(code: string, offset: number): Promise<UserPlaylists> {
   let requestUrl = `https://api.spotify.com/v1/me/playlists?limit=50&offset=${offset}`;
-
   //first 50 Playlists 
   const response = await fetch(`https://api.spotify.com/v1/me/playlists?limit=50&offset=${offset}`, {
       method: "GET", headers: { Authorization: `Bearer ${code}` }
@@ -144,11 +143,10 @@ export async function getUserPlaylists(code: string, offset: number): Promise<Us
 export async function getSearch(inputSearch: string): Promise<Search> {
   const queryString = new URLSearchParams(inputSearch).toString();
   const params = new URLSearchParams();
-  params.append("q", queryString); // je crois que ca fait la ligne queryString tout seul 
-  params.append("type", "track");
-  params.append("type", "album");
+  params.append("q", queryString); // je crois que ca fait la ligne qui initialise queryString tout seul 
+  params.append("type", "album,playlist");
 
-  const result = await fetch(`https://api.spotify.com/v1/tracks/${params}`, {
+  const result = await fetch(`https://api.spotify.com/v1/search?${params}`, {
       method: "GET", headers: { Authorization: `Bearer ${config.access_token}` }
   });
   CheckStatus(result);

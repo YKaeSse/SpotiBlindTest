@@ -7,7 +7,7 @@
     </div>
     <div class="input-playlist">
         <div class="checkBox-Global-playlists">
-            <input type="checkbox" id="GlobalSearch" name="GlobalSearch" value="GlobalSearch" />
+            <input type="checkbox" id="GlobalSearch" name="GlobalSearch" value="GlobalSearch" (change)="handleCheckboxChange($event)"/>
             <label for="GlobalSearch">Search Global</label>
         </div>
         <div class="input-playlist-item">
@@ -18,8 +18,8 @@
     </div>
     <div>
     <div class="playlists" id="playlistScroll">
-            <a class="playlist-item glow" href="{{item.playlistUrl}}" *ngFor="let item of items" (click)="resetCount()" (mouseover)="getGlow($event, item.imagePath)">
-                    <img src="{{item.imagePath}}" alt="{{item[0]}}" class="playlist-image">
+            <a class="playlist-item glow" href="{{item.playlistUrl}}" *ngFor="let item of items" (click)="resetCount()" (mouseenter)="getGlow($event, item.imagePath)">
+                    <img src="{{item.imagePath}}" alt="{{item.PlaylistName}}" class="playlist-image">
                     <p class="playlist-name">{{item.PlaylistName}}</p>
             </a>
     </div>

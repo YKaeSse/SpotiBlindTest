@@ -1,10 +1,16 @@
 import { Component } from '@angular/core';
 import { redirectToAuthCodeFlow, getAccessToken} from 'src/assets/code/token';
-import { fetchProfile, getUserPlaylists} from 'src/assets/code/HttpRequest';
+import { fetchProfile, getSearch, getUserPlaylists} from 'src/assets/code/HttpRequest';
 import { UserProfile, Search, UserPlaylists} from 'src/assets/code/ObjectsFormat';
 import { ConfigService } from 'src/app/shared/config.service';
 var Vibrant = require('node-vibrant');
 
+interface playlistItem
+{
+  playlistUrl: string, 
+  imagePath: string, 
+  PlaylistName:string
+}
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -13,7 +19,9 @@ var Vibrant = require('node-vibrant');
 export class HomeComponent {
   musicSearch: string = "";
   errorMsg: string ="";
+  
   IsSearch: boolean = false;
+  private timer: NodeJS.Timeout | null = null;
 
   /* Pour la réponse de la playlist */
   imagePath: string = "";
@@ -22,9 +30,9 @@ export class HomeComponent {
 
   PersonnalizeGlow: any = "";
 
-  AllItems: any[] = [];
-  ItemsSortByRecentAdd: any[] = [];
-  items: any[] = []; // Déclaration du tableau de données
+  AllItems: playlistItem[] = [];
+  ItemsSortByRecentAdd: playlistItem[] = [];
+  items: playlistItem[] = []; // Déclaration du tableau de données
 
   constructor(private configService: ConfigService) {
 
@@ -87,19 +95,54 @@ export class HomeComponent {
       return;
     else
       this.oldInput = value;
-    if (value === "")
-      this.items = this.AllItems;
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+    if(this.IsSearch){
+      console.log("isearch", value);
+      this.items = [];
+      // TODO : lancer la fonction de recherche globale
+      this.timer = setTimeout(async () => {
+        let resultSearch : Search = await getSearch(value);
+        // Recup les playlists
+        let arrPlaylists: playlistItem[] = [];
+        resultSearch.playlists.items.forEach(elt => {
+          const params = new URLSearchParams();
+          params.append("id", elt.id);
+          const link = `/blindtest?${params.toString()}`;
+          arrPlaylists.push({
+            playlistUrl: link,
+            imagePath: elt.images[0].url,
+            PlaylistName: elt.name.toString()
+          });
+        })
+        // TODO probleme quand y'aura aussi les albums donc soit push direct dans items soit faire un items.push(...arrPlaylists) etc
+        this.items = arrPlaylists;
+
+        //Recup des albums
+        // TODO gerer la reception et la traitement des albums 
+        // quand ca sera fait gerer le fait de pas afficher les albums a 1 ou 2 titres -> pas interessant
+      }, 1000);
+    }
     else
     {
-      this.items = [];
-      this.AllItems.forEach(elt => {
-        const PlaylistName: string = (elt.PlaylistName).toLowerCase().replaceAll(" ", "");
-        if (PlaylistName.includes(value))
-        {
-          console.log(value, PlaylistName)
-          this.items.push(elt);
-        }
-      });
+      
+      console.log("autre", value);
+      if (value === "")
+      this.items = this.AllItems;
+      else
+      {
+        // TODO faudrait gerer le fait que si dans la recherche deux noms en lowercase sont egaux, les comparer sans lowercase
+        this.items = [];
+        this.AllItems.forEach(elt => {
+          const PlaylistName: string = (elt.PlaylistName).toLowerCase().replaceAll(" ", "");
+          if (PlaylistName.includes(value))
+          {
+            console.log(value, PlaylistName)
+            this.items.push(elt);
+          }
+        });
+      }
     }
   }
 
@@ -130,18 +173,13 @@ export class HomeComponent {
     }
   }
 
-  private timer: NodeJS.Timeout | null = null;
-  // Fonction qui sera appelée lorsqu'il y a un changement dans la barre de recherche
-  onInputChange(text: string): void {
-    // Si un délai est déjà en cours, le réinitialiser
-    if (this.timer) {
-      clearTimeout(this.timer);
-    }
-
-    // Définir un nouveau délai
-    this.timer = setTimeout(() => {
-      // Fonction à exécuter après le délai
-      //this.envoyerRequeteApi(text);
-    }, 1000); // 1000 millisecondes (1 seconde) de délai, ajustez selon vos besoins
+  
+  handleCheckboxChange(event: any) {
+    console.log("rentre")
+    this.IsSearch = event.target.checked;
+    console.log(this.IsSearch)
+    const simulatedEvent = { target: { value: (document.getElementById('InputSearchPlaylist') as HTMLInputElement).value } };
+    console.log(simulatedEvent)
+    this.onSearchChange(simulatedEvent);
   }
 }
