@@ -8,13 +8,32 @@
     <div class="input-playlist">
         <div class="checkBox-Global-playlists">
             <input type="checkbox" id="GlobalSearch" name="GlobalSearch" value="GlobalSearch" (change)="handleCheckboxChange($event)"/>
-            <label for="GlobalSearch">Search Global</label>
+            <label for="GlobalSearch"></label>
+            <span>Search Global</span>
         </div>
         <div class="input-playlist-item">
             <span class="material-symbols-outlined icon-search">search</span>
             <input type="text" id="InputSearchPlaylist" placeholder="Entrez le nom d'une playlist..." value="" autocomplete="off" (input)="onSearchChange($event)">
         </div>
-        <span class="sort-by" (click)="SortBy('name', true)">Trier par</span>
+        <button mat-icon-button class="sort-by" [matMenuTriggerFor]="menu" aria-label="Trier par">
+            <span class="material-symbols-outlined">sort</span>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item class="mat-menu-custom-width" (click)="SortBy('name', true)">
+                <div class="sort-by-item">
+                    <span class="material-symbols-outlined">sort_by_alpha</span>
+                    <span>Nom</span>
+                    <span *ngIf="sortby === 'name'" class="material-symbols-outlined sort-arrow">{{ sortAsc ? 'arrow_downward_alt' : 'arrow_upward_alt' }}</span>
+                </div>
+            </button>
+            <button mat-menu-item class="mat-menu-custom-width" (click)="SortBy('recentAdd', true)">
+                <div class="sort-by-item">
+                    <span class="material-symbols-outlined">date_range</span>
+                    <span>Date d'ajout</span>
+                    <span *ngIf="sortby === 'recentAdd'" class="material-symbols-outlined sort-arrow">{{ sortAsc ? 'arrow_downward_alt' : 'arrow_upward_alt' }}</span>
+                </div>
+            </button>
+        </mat-menu>
     </div>
     <div>
     <div class="playlists" id="playlistScroll">

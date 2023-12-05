@@ -51,19 +51,66 @@
   }
 }
 
-.checkBox-Global-playlists
-{
+// .checkBox-Global-playlists
+// {
+//   margin: 10px;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// }
+// .checkBox-Global-playlists input
+// {
+//   margin-right: 10px;
+//   height: 20px;
+//   width: 20px;
+//   background-color: #822a2a;
+// }
+
+.checkBox-Global-playlists {
   margin: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.checkBox-Global-playlists input
-{
-  margin-right: 10px;
-  height: 20px;
-  width: 20px;
-  background-color: #822a2a;
+
+.checkBox-Global-playlists label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  height: 28px;
+  width: 28px;
+}
+.checkBox-Global-playlists span{
+  margin-left: 8px;
+}
+
+.checkBox-Global-playlists label:after {
+  border: 2px solid #fff;
+  border-top: none;
+  border-right: none;
+  content: "";
+  height: 6px;
+  opacity: 0;
+  transform: rotate(-45deg);
+  width: 12px;
+  margin-bottom: 2px;
+}
+
+.checkBox-Global-playlists input[type="checkbox"] {
+  visibility: hidden;
+}
+
+.checkBox-Global-playlists input[type="checkbox"]:checked + label {
+  background-color: #66bb6a;
+  border-color: #66bb6a;
+}
+
+.checkBox-Global-playlists input[type="checkbox"]:checked + label:after {
+  opacity: 1;
 }
 
 .sort-by
@@ -71,12 +118,32 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #92919d4d;
-  border-radius: 15px;
-  width: 150px;
-  height: 50px;
-  font-size: 18px;
-  margin-left: 10px;
+}
+
+.mat-menu-custom-width {
+  min-width: 250px;
+  max-width: 350px;
+}
+
+.sort-by-item
+{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.sort-by-item :first-child
+{
+  margin-right: 8px;
+}
+
+.sort-arrow
+{
+  position: fixed;
+  right: 8px;
+  font-size: 30px;
+  font-weight: 500;
+  color: rgb(19, 117, 19);
 }
 
 .top-text {

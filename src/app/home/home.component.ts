@@ -3,6 +3,7 @@ import { redirectToAuthCodeFlow, getAccessToken} from 'src/assets/code/token';
 import { fetchProfile, getSearch, getUserPlaylists} from 'src/assets/code/HttpRequest';
 import { UserProfile, Search, UserPlaylists} from 'src/assets/code/ObjectsFormat';
 import { ConfigService } from 'src/app/shared/config.service';
+
 var Vibrant = require('node-vibrant');
 
 interface playlistItem
@@ -22,6 +23,8 @@ export class HomeComponent {
   
   IsSearch: boolean = false;
   private timer: NodeJS.Timeout | null = null;
+  sortby: string = "recentAdd";
+  sortAsc: boolean = false;
 
   /* Pour la réponse de la playlist */
   imagePath: string = "";
@@ -88,18 +91,12 @@ export class HomeComponent {
       }
   }
 
-  oldInput: string = "";
-  onSearchChange(searchValue: any): void {  
+  onSearchChange(searchValue: any): void {
     const value: string = (searchValue.target.value).toLowerCase().replaceAll(" ", "");
-    if (this.oldInput.toLowerCase().replaceAll(" ", "") === value)
-      return;
-    else
-      this.oldInput = value;
     if (this.timer) {
       clearTimeout(this.timer);
     }
     if(this.IsSearch){
-      console.log("isearch", value);
       this.items = [];
       // TODO : lancer la fonction de recherche globale
       this.timer = setTimeout(async () => {
@@ -126,8 +123,6 @@ export class HomeComponent {
     }
     else
     {
-      
-      console.log("autre", value);
       if (value === "")
       this.items = this.AllItems;
       else
@@ -148,10 +143,21 @@ export class HomeComponent {
 
   SortBy(by: string, ascendent: boolean)
   {
-    let lessThan: number = ascendent ? -1 : 1
-    let greaterThan: number = ascendent ? 1 : -1
+    let lessThan: number = -1
+    let greaterThan: number = 1
     if (by === "name")
     {
+      if (this.sortby === "name" && !this.sortAsc)
+      {
+          this.sortAsc = true;
+          lessThan = 1;
+          greaterThan = -1;
+      }
+      else
+      {
+        this.sortAsc = false;
+        this.sortby = by;
+      }
       this.items = this.items.sort((a, b) => {
         const nameA = a.PlaylistName.toUpperCase();
         const nameB = b.PlaylistName.toUpperCase();
@@ -166,20 +172,29 @@ export class HomeComponent {
     }
     else if (by === "recentAdd")
     {
-      if (ascendent)
-        this.items = this.ItemsSortByRecentAdd;
+      if (this.sortby === "recentAdd")
+      {
+        if (!this.sortAsc)
+        {
+          this.sortAsc = true;
+          this.items = this.ItemsSortByRecentAdd.reverse();
+        }
+        else
+          this.items = this.ItemsSortByRecentAdd;
+      }
       else
-        this.items = this.ItemsSortByRecentAdd.reverse();
+      {
+        this.sortAsc = false;
+        this.sortby = by;
+        this.items = this.ItemsSortByRecentAdd;
+      }
     }
   }
 
   
   handleCheckboxChange(event: any) {
-    console.log("rentre")
     this.IsSearch = event.target.checked;
-    console.log(this.IsSearch)
     const simulatedEvent = { target: { value: (document.getElementById('InputSearchPlaylist') as HTMLInputElement).value } };
-    console.log(simulatedEvent)
     this.onSearchChange(simulatedEvent);
   }
 }

@@ -11,6 +11,10 @@ import { FooterComponent } from './footer/footer.component';
 import { BlindTestComponent } from './blind-test/blind-test.component';
 import { SearchMusicComponent } from './search-music/search-music.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatIconModule} from '@angular/material/icon';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -26,7 +30,11 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule, // add this lib to use ngModel
+    FormsModule,
+    BrowserAnimationsModule, // add this lib to use ngModel
+    MatIconModule,
+    MatMenuModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
