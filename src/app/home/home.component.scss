@@ -120,6 +120,14 @@
   align-items: center;
 }
 
+.mat-menu-deroulant
+{
+  background-color: #424242 !important;
+}
+.mat-menu-custom-width:hover {
+  background-color: #515151 !important;
+}
+
 .mat-menu-custom-width {
   min-width: 250px;
   max-width: 350px;

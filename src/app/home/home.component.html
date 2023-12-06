@@ -18,15 +18,15 @@
         <button mat-icon-button class="sort-by" [matMenuTriggerFor]="menu" aria-label="Trier par">
             <span class="material-symbols-outlined">sort</span>
         </button>
-        <mat-menu #menu="matMenu">
-            <button mat-menu-item class="mat-menu-custom-width" (click)="SortBy('name', true)">
+        <mat-menu #menu="matMenu" class="mat-menu-deroulant">
+            <button mat-menu-item class="mat-menu-custom-width" (click)="SortBy('name')">
                 <div class="sort-by-item">
                     <span class="material-symbols-outlined">sort_by_alpha</span>
                     <span>Nom</span>
                     <span *ngIf="sortby === 'name'" class="material-symbols-outlined sort-arrow">{{ sortAsc ? 'arrow_downward_alt' : 'arrow_upward_alt' }}</span>
                 </div>
             </button>
-            <button mat-menu-item class="mat-menu-custom-width" (click)="SortBy('recentAdd', true)">
+            <button mat-menu-item class="mat-menu-custom-width" (click)="SortBy('recentAdd')">
                 <div class="sort-by-item">
                     <span class="material-symbols-outlined">date_range</span>
                     <span>Date d'ajout</span>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,ViewEncapsulation  } from '@angular/core';
 import { redirectToAuthCodeFlow, getAccessToken} from 'src/assets/code/token';
 import { fetchProfile, getSearch, getUserPlaylists} from 'src/assets/code/HttpRequest';
 import { UserProfile, Search, UserPlaylists} from 'src/assets/code/ObjectsFormat';
@@ -16,6 +16,7 @@ interface playlistItem
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class HomeComponent {
   musicSearch: string = "";
@@ -141,7 +142,7 @@ export class HomeComponent {
     }
   }
 
-  SortBy(by: string, ascendent: boolean)
+  SortBy(by: string)
   {
     let lessThan: number = -1
     let greaterThan: number = 1
@@ -177,7 +178,8 @@ export class HomeComponent {
         if (!this.sortAsc)
         {
           this.sortAsc = true;
-          this.items = this.ItemsSortByRecentAdd.reverse();
+          let reverseItCopy = this.ItemsSortByRecentAdd;
+          this.items = reverseItCopy.reverse();
         }
         else
           this.items = this.ItemsSortByRecentAdd;
