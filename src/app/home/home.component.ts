@@ -1,7 +1,7 @@
 import { Component,ViewEncapsulation  } from '@angular/core';
-import { redirectToAuthCodeFlow, getAccessToken} from 'src/assets/code/token';
+import { redirectToAuthCodeFlow } from 'src/assets/code/token';
 import { fetchProfile, getSearch, getUserPlaylists} from 'src/assets/code/HttpRequest';
-import { UserProfile, Search, UserPlaylists} from 'src/assets/code/ObjectsFormat';
+import { Search, UserPlaylists} from 'src/assets/code/ObjectsFormat';
 import { ConfigService } from 'src/app/shared/config.service';
 
 var Vibrant = require('node-vibrant');
@@ -22,7 +22,7 @@ export class HomeComponent {
   musicSearch: string = "";
   errorMsg: string ="";
   
-  IsSearch: boolean = false;
+  IsGlobalSearch: boolean = false;
   private timer: NodeJS.Timeout | null = null;
   sortby: string = "recentAdd";
   sortAsc: boolean = false;
@@ -97,8 +97,9 @@ export class HomeComponent {
     if (this.timer) {
       clearTimeout(this.timer);
     }
-    if(this.IsSearch){
-      console.log("ici")
+    if(this.IsGlobalSearch){
+      // TODO General -> quand la liste est vide afficher un message comme quoi aucun truc corresond a la recherche
+      // et mettre un chargement avec le composant Angular pendant les 1sec de recherche 
       this.items = [];
       // TODO : lancer la fonction de recherche globale
       this.timer = setTimeout(async () => {
@@ -125,9 +126,8 @@ export class HomeComponent {
     }
     else
     {
-      console.log("al2")
       if (value === "")
-      this.items = this.AllItems;
+      this.items = [...this.AllItems];
       else
       {
         // TODO faudrait gerer le fait que si dans la recherche deux noms en lowercase sont egaux, les comparer sans lowercase
@@ -136,7 +136,7 @@ export class HomeComponent {
           const PlaylistName: string = (elt.PlaylistName).toLowerCase().replaceAll(" ", "");
           if (PlaylistName.includes(value))
           {
-            console.log(value, PlaylistName)
+            //console.log(value, PlaylistName)
             this.items.push(elt);
           }
         });
@@ -146,10 +146,10 @@ export class HomeComponent {
 
   SortBy(by: string)
   {
-    let lessThan: number = -1
-    let greaterThan: number = 1
     if (by === "name")
     {
+      let lessThan: number = -1
+      let greaterThan: number = 1
       if (this.sortby === "name" && !this.sortAsc)
       {
           this.sortAsc = true;
@@ -180,24 +180,48 @@ export class HomeComponent {
         if (!this.sortAsc)
         {
           this.sortAsc = true;
-          let reverseItCopy = this.ItemsSortByRecentAdd;
-          this.items = reverseItCopy.reverse();
+          this.items = this.ItemsSortByRecentAdd
+          .slice()
+          .reverse()
+          .map(elt => this.items.find(copy => copy?.PlaylistName === elt.PlaylistName))
+          .filter(item => item !== undefined) as playlistItem[];
+          // let reverseItCopy = ([...this.ItemsSortByRecentAdd]).reverse();
+          // let copycurrentitems = [...this.items];
+          // this.items = [];
+          // // [1,3,5,2,4] [1,2,3]
+          // reverseItCopy.forEach(elt => {
+          //   copycurrentitems.forEach(copy => {
+          //     if(elt.PlaylistName == copy.PlaylistName)
+          //     {
+          //       this.items.push(copy);
+          //     }
+          //   })
+          // });
         }
         else
-          this.items = this.ItemsSortByRecentAdd;
+        {
+          this.sortAsc = false;
+          this.items = this.ItemsSortByRecentAdd
+          .slice()
+          .map(elt => this.items.find(copy => copy?.PlaylistName === elt.PlaylistName))
+          .filter(item => item !== undefined) as playlistItem[];
+        }
       }
       else
       {
         this.sortAsc = false;
         this.sortby = by;
-        this.items = this.ItemsSortByRecentAdd;
+        this.items = this.ItemsSortByRecentAdd
+          .slice()
+          .map(elt => this.items.find(copy => copy?.PlaylistName === elt.PlaylistName))
+          .filter(item => item !== undefined) as playlistItem[];
       }
     }
   }
 
   changeGlobalSearch(isGlobal: boolean)
   {
-    this.IsSearch = isGlobal;
+    this.IsGlobalSearch = isGlobal;
     const simulatedEvent = { target: { value: (document.getElementById('InputSearchPlaylist') as HTMLInputElement).value } };
     this.onSearchChange(simulatedEvent);
   }
