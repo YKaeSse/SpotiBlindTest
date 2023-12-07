@@ -44,11 +44,33 @@
     input {
       justify-content: center;
       padding-left: 15px;
-      width: 80%;
+      width: 100%;
       background-color: #36373f;
       border: none;
     }
   }
+}
+
+.icon-public-earth
+{
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  margin-right: 5px;
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.icon-public-earth:hover
+{
+  background-color:#515151;
+}
+
+.icon-public-earth-active
+{
+  color: rgb(132, 177, 225);
 }
 
 // .checkBox-Global-playlists
@@ -71,6 +93,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 .checkBox-Global-playlists label {

@@ -98,10 +98,11 @@ export class HomeComponent {
       clearTimeout(this.timer);
     }
     if(this.IsSearch){
+      console.log("ici")
       this.items = [];
       // TODO : lancer la fonction de recherche globale
       this.timer = setTimeout(async () => {
-        let resultSearch : Search = await getSearch(value);
+        let resultSearch : Search = await getSearch(this.configService.access_token, value);
         // Recup les playlists
         let arrPlaylists: playlistItem[] = [];
         resultSearch.playlists.items.forEach(elt => {
@@ -124,6 +125,7 @@ export class HomeComponent {
     }
     else
     {
+      console.log("al2")
       if (value === "")
       this.items = this.AllItems;
       else
@@ -193,9 +195,9 @@ export class HomeComponent {
     }
   }
 
-  
-  handleCheckboxChange(event: any) {
-    this.IsSearch = event.target.checked;
+  changeGlobalSearch(isGlobal: boolean)
+  {
+    this.IsSearch = isGlobal;
     const simulatedEvent = { target: { value: (document.getElementById('InputSearchPlaylist') as HTMLInputElement).value } };
     this.onSearchChange(simulatedEvent);
   }

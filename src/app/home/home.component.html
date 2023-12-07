@@ -6,14 +6,11 @@
         <div>Le blind test qui teste vos connaissances sur vos playlists.</div>
     </div>
     <div class="input-playlist">
-        <div class="checkBox-Global-playlists">
-            <input type="checkbox" id="GlobalSearch" name="GlobalSearch" value="GlobalSearch" (change)="handleCheckboxChange($event)"/>
-            <label for="GlobalSearch"></label>
-            <span>Search Global</span>
-        </div>
         <div class="input-playlist-item">
             <span class="material-symbols-outlined icon-search">search</span>
             <input type="text" id="InputSearchPlaylist" placeholder="Entrez le nom d'une playlist..." value="" autocomplete="off" (input)="onSearchChange($event)">
+            <span *ngIf="!IsSearch" (click)="changeGlobalSearch(true)" class="material-symbols-outlined icon-public-earth">public_off</span>
+            <span *ngIf="IsSearch" (click)="changeGlobalSearch(false)" class="material-symbols-outlined icon-public-earth icon-public-earth-active">public</span> 
         </div>
         <button mat-icon-button class="sort-by" [matMenuTriggerFor]="menu" aria-label="Trier par">
             <span class="material-symbols-outlined">sort</span>
