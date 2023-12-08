@@ -140,14 +140,14 @@ export async function getUserPlaylists(code: string, offset: number): Promise<Us
   return Playlists;
 }
 
-export async function getSearch(inputSearch: string): Promise<Search> {
+export async function getSearch(code: string, inputSearch: string): Promise<Search> {
   const queryString = new URLSearchParams(inputSearch).toString();
   const params = new URLSearchParams();
   params.append("q", queryString); // je crois que ca fait la ligne qui initialise queryString tout seul 
   params.append("type", "album,playlist");
 
   const result = await fetch(`https://api.spotify.com/v1/search?${params}`, {
-      method: "GET", headers: { Authorization: `Bearer ${config.access_token}` }
+      method: "GET", headers: { Authorization: `Bearer ${code}` }
   });
   CheckStatus(result);
 

@@ -6,27 +6,24 @@
         <div>Le blind test qui teste vos connaissances sur vos playlists.</div>
     </div>
     <div class="input-playlist">
-        <div class="checkBox-Global-playlists">
-            <input type="checkbox" id="GlobalSearch" name="GlobalSearch" value="GlobalSearch" (change)="handleCheckboxChange($event)"/>
-            <label for="GlobalSearch"></label>
-            <span>Search Global</span>
-        </div>
         <div class="input-playlist-item">
             <span class="material-symbols-outlined icon-search">search</span>
             <input type="text" id="InputSearchPlaylist" placeholder="Entrez le nom d'une playlist..." value="" autocomplete="off" (input)="onSearchChange($event)">
+            <span *ngIf="!IsGlobalSearch" (click)="changeGlobalSearch(true)" class="material-symbols-outlined icon-public-earth">public_off</span>
+            <span *ngIf="IsGlobalSearch" (click)="changeGlobalSearch(false)" class="material-symbols-outlined icon-public-earth icon-public-earth-active">public</span> 
         </div>
         <button mat-icon-button class="sort-by" [matMenuTriggerFor]="menu" aria-label="Trier par">
             <span class="material-symbols-outlined">sort</span>
         </button>
-        <mat-menu #menu="matMenu">
-            <button mat-menu-item class="mat-menu-custom-width" (click)="SortBy('name', true)">
+        <mat-menu #menu="matMenu" class="mat-menu-deroulant">
+            <button mat-menu-item class="mat-menu-custom-width" (click)="SortBy('name')">
                 <div class="sort-by-item">
                     <span class="material-symbols-outlined">sort_by_alpha</span>
                     <span>Nom</span>
                     <span *ngIf="sortby === 'name'" class="material-symbols-outlined sort-arrow">{{ sortAsc ? 'arrow_downward_alt' : 'arrow_upward_alt' }}</span>
                 </div>
             </button>
-            <button mat-menu-item class="mat-menu-custom-width" (click)="SortBy('recentAdd', true)">
+            <button mat-menu-item class="mat-menu-custom-width" (click)="SortBy('recentAdd')">
                 <div class="sort-by-item">
                     <span class="material-symbols-outlined">date_range</span>
                     <span>Date d'ajout</span>
