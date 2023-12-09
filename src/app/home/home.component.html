@@ -37,12 +37,16 @@
     </div>
     <div>
     <div class="playlists" id="playlistScroll">
-            <a class="playlist-item glow" href="{{item.playlistUrl}}" *ngFor="let item of items" (click)="resetCount()" (mouseenter)="getGlow($event, item.imagePath)">
+            <a class="playlist-item glow" href="{{item.playlistUrl}}" *ngFor="let item of itemsPlaylists" (click)="resetCount()" (mouseenter)="getGlow($event, item.imagePath)">
                     <img src="{{item.imagePath}}" alt="{{item.PlaylistName}}" class="playlist-image">
                     <p class="playlist-name">{{item.PlaylistName}}</p>
             </a>
     </div>
-</div>
 
-<div class="container-shadow">
+    <div class="albums" id="albumsScroll">
+        <a class="album-item glow" href="{{item.albumUrl}}" *ngFor="let item of itemsAlbums" (click)="resetCount()" (mouseenter)="getGlow($event, item.imagePath)">
+                <img src="{{item.imagePath}}" alt="{{item.albumName}}" class="playlist-image">
+                <p class="playlist-name">{{item.albumName}}</p>
+        </a>
+    </div>
 </div>

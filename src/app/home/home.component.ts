@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { redirectToAuthCodeFlow, getAccessToken} from 'src/assets/code/token';
-import { fetchProfile, getSearch, getUserPlaylists} from 'src/assets/code/HttpRequest';
-import { UserProfile, Search, UserPlaylists} from 'src/assets/code/ObjectsFormat';
+import { fetchProfile, getSearch, getUserPlaylists, getUserAlbums} from 'src/assets/code/HttpRequest';
+import { UserProfile, Search, UserPlaylists, UserAlbums} from 'src/assets/code/ObjectsFormat';
 import { ConfigService } from 'src/app/shared/config.service';
 
 var Vibrant = require('node-vibrant');
@@ -12,6 +12,15 @@ interface playlistItem
   imagePath: string, 
   PlaylistName:string
 }
+
+
+interface albumItem
+{
+  albumUrl: string, 
+  imagePath: string, 
+  albumName:string
+}
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -33,15 +42,35 @@ export class HomeComponent {
 
   PersonnalizeGlow: any = "";
 
-  AllItems: playlistItem[] = [];
-  ItemsSortByRecentAdd: playlistItem[] = [];
-  items: playlistItem[] = []; // Déclaration du tableau de données
-
+  AllItemsPlaylist: playlistItem[] = [];
+  AllItemsAlbums:  albumItem[] = [];
+  ItemsPlaylistSortByRecentAdd: playlistItem[] = [];
+  ItemsAlbumSortByRecentAdd: albumItem[] = [];
+  itemsPlaylists: playlistItem[] = []; // Déclaration du tableau de données
+  itemsAlbums: albumItem[] = [];
   constructor(private configService: ConfigService) {
 
     //this.getPlaylist();
   }
-
+  async getAlbums() {
+    let offset : number = 0;
+    let AlbumsUser : UserAlbums = await getUserAlbums(this.configService.access_token,offset);
+    let Albums = AlbumsUser.items;
+    console.log("Nombre d'albums totales " + Albums.length)
+    for (let album of Albums) {
+      let myAlbum = album.album;
+      const params = new URLSearchParams();
+      params.append("id", myAlbum.id);
+      const link = `/blindtest?${params.toString()}`;
+      this.itemsAlbums.push({
+        albumUrl: link,
+        imagePath: myAlbum.images[0].url,
+        albumName: myAlbum.name.toString()
+      });
+    }
+    this.AllItemsAlbums = this.itemsAlbums;
+    this.ItemsAlbumSortByRecentAdd = this.itemsAlbums;
+  }
   async getPlaylist() {
     this.errorMsg = "";
     let offset : number = 0;
@@ -52,14 +81,14 @@ export class HomeComponent {
       const params = new URLSearchParams();
       params.append("id", playlist.id);
       const link = `/blindtest?${params.toString()}`;
-      this.items.push({
+      this.itemsPlaylists.push({
         playlistUrl: link,
         imagePath: playlist.images[0].url,
         PlaylistName: playlist.name.toString()
       });
     }
-    this.AllItems = this.items;
-    this.ItemsSortByRecentAdd = this.items;
+    this.AllItemsPlaylist = this.itemsPlaylists;
+    this.ItemsPlaylistSortByRecentAdd = this.itemsPlaylists;
  }
   resetCount() {
     this.configService.actualNumber = 0;
@@ -97,7 +126,7 @@ export class HomeComponent {
       clearTimeout(this.timer);
     }
     if(this.IsSearch){
-      this.items = [];
+      this.itemsPlaylists = [];
       // TODO : lancer la fonction de recherche globale
       this.timer = setTimeout(async () => {
         let resultSearch : Search = await getSearch(value);
@@ -114,7 +143,7 @@ export class HomeComponent {
           });
         })
         // TODO probleme quand y'aura aussi les albums donc soit push direct dans items soit faire un items.push(...arrPlaylists) etc
-        this.items = arrPlaylists;
+        this.itemsPlaylists = arrPlaylists;
 
         //Recup des albums
         // TODO gerer la reception et la traitement des albums 
@@ -124,17 +153,17 @@ export class HomeComponent {
     else
     {
       if (value === "")
-      this.items = this.AllItems;
+      this.itemsPlaylists = this.AllItemsPlaylist;
       else
       {
         // TODO faudrait gerer le fait que si dans la recherche deux noms en lowercase sont egaux, les comparer sans lowercase
-        this.items = [];
-        this.AllItems.forEach(elt => {
+        this.itemsPlaylists = [];
+        this.AllItemsPlaylist.forEach(elt => {
           const PlaylistName: string = (elt.PlaylistName).toLowerCase().replaceAll(" ", "");
           if (PlaylistName.includes(value))
           {
             console.log(value, PlaylistName)
-            this.items.push(elt);
+            this.itemsPlaylists.push(elt);
           }
         });
       }
@@ -158,7 +187,7 @@ export class HomeComponent {
         this.sortAsc = false;
         this.sortby = by;
       }
-      this.items = this.items.sort((a, b) => {
+      this.itemsPlaylists = this.itemsPlaylists.sort((a, b) => {
         const nameA = a.PlaylistName.toUpperCase();
         const nameB = b.PlaylistName.toUpperCase();
         if (nameA < nameB) {
@@ -177,16 +206,16 @@ export class HomeComponent {
         if (!this.sortAsc)
         {
           this.sortAsc = true;
-          this.items = this.ItemsSortByRecentAdd.reverse();
+          this.itemsPlaylists = this.ItemsPlaylistSortByRecentAdd.reverse();
         }
         else
-          this.items = this.ItemsSortByRecentAdd;
+          this.itemsPlaylists = this.ItemsPlaylistSortByRecentAdd;
       }
       else
       {
         this.sortAsc = false;
         this.sortby = by;
-        this.items = this.ItemsSortByRecentAdd;
+        this.itemsPlaylists = this.ItemsPlaylistSortByRecentAdd;
       }
     }
   }

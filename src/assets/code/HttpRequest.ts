@@ -1,5 +1,5 @@
 
-import { UserProfile, Search, Track, UserPlaylists, PlaylistTracks,PlaylistTracksItem} from 'src/assets/code/ObjectsFormat'
+import { UserProfile, Search, Track, UserPlaylists, PlaylistTracks,PlaylistTracksItem, UserAlbums} from 'src/assets/code/ObjectsFormat'
 import { redirectToAuthCodeFlow} from 'src/assets/code/token'
 import { ConfigService } from 'src/app/shared/config.service';
 
@@ -138,6 +138,38 @@ export async function getUserPlaylists(code: string, offset: number): Promise<Us
   await Promise.all(promises);
   const Playlists: UserPlaylists = { "items": currentPlaylist } as UserPlaylists;
   return Playlists;
+}
+
+
+export async function getUserAlbums(code: string, offset: number): Promise<UserAlbums> {
+  let requestUrl = `https://api.spotify.com/v1/me/albums?limit=50&offset=${offset}`;
+  //first 50 Playlists 
+  const response = await fetch(requestUrl, {
+      method: "GET", headers: { Authorization: `Bearer ${code}` }
+  });
+  CheckStatus(response);
+  const result = await response.json();
+  const currentAlbum = result.items;
+  const total = result.total;
+
+  //async all rest Albums
+  const promises: Promise<void>[] = [];
+  const limitMax = (Math.floor(total / 50) + 1) * 50;
+  for (let offset = 50; offset < limitMax; offset += 50)
+  {
+    requestUrl = `https://api.spotify.com/v1/me/albums/?offset=${offset}&limit=50`
+    promises.push(fetch(requestUrl, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${code}` }
+    }).then(async (res) => {
+        CheckStatus(res);
+        const data = await res.json();
+        currentAlbum.push(...data.items);
+      }));
+  }
+  await Promise.all(promises);
+  const Albums: UserAlbums = { "items": currentAlbum } as UserAlbums;
+  return Albums;
 }
 
 export async function getSearch(inputSearch: string): Promise<Search> {
