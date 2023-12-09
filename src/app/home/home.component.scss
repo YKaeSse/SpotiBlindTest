@@ -43,73 +43,33 @@
     input {
       justify-content: center;
       padding-left: 15px;
-      width: 80%;
+      width: 100%;
       background-color: #36373f;
       border: none;
     }
   }
 }
 
-// .checkBox-Global-playlists
-// {
-//   margin: 10px;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// }
-// .checkBox-Global-playlists input
-// {
-//   margin-right: 10px;
-//   height: 20px;
-//   width: 20px;
-//   background-color: #822a2a;
-// }
-
-.checkBox-Global-playlists {
-  margin: 10px;
-  display: flex;
+.icon-public-earth
+{
+  display: flex !important;
   justify-content: center;
   align-items: center;
-}
-
-.checkBox-Global-playlists label {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-  border: 1px solid #ccc;
+  margin-right: 5px;
+  height: 36px;
+  width: 36px;
   border-radius: 50%;
   cursor: pointer;
-  height: 28px;
-  width: 28px;
-}
-.checkBox-Global-playlists span{
-  margin-left: 8px;
 }
 
-.checkBox-Global-playlists label:after {
-  border: 2px solid #fff;
-  border-top: none;
-  border-right: none;
-  content: "";
-  height: 6px;
-  opacity: 0;
-  transform: rotate(-45deg);
-  width: 12px;
-  margin-bottom: 2px;
+.icon-public-earth:hover
+{
+  background-color:#515151;
 }
 
-.checkBox-Global-playlists input[type="checkbox"] {
-  visibility: hidden;
-}
-
-.checkBox-Global-playlists input[type="checkbox"]:checked + label {
-  background-color: #66bb6a;
-  border-color: #66bb6a;
-}
-
-.checkBox-Global-playlists input[type="checkbox"]:checked + label:after {
-  opacity: 1;
+.icon-public-earth-active
+{
+  color: rgb(132, 177, 225);
 }
 
 .sort-by
@@ -117,6 +77,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.mat-menu-deroulant
+{
+  background-color: #2C2F38 !important;
+}
+.mat-menu-custom-width:hover {
+  background-color: #3d414d !important;
 }
 
 .mat-menu-custom-width {
