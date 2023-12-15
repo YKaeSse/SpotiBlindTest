@@ -25,7 +25,9 @@
     </div>
     
     <div class="input-music">
-        <input type="text"  id="InputMusic" placeholder="Entrez la musique et l'artiste..." value="" autocomplete="off" (keyup.Space)="PressSpace($event)" (keyup.control.Enter)="PressCtrlEnter()">
+        <input type="text"  id="InputMusic" placeholder="Entrez la musique et l'artiste..." value=""
+        autocomplete="off" autocorrect="off" autocapitalize="off"
+        (keyup.Space)="PressSpace($event)" (keyup.control.Enter)="PressCtrlEnter()">
         <span (click)="findMusic()" class="material-symbols-outlined">send</span> 
     </div>
 

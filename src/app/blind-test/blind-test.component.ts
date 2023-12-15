@@ -134,7 +134,7 @@ await: any;
     // Comparer avec this.currentMusicArtists
     if (!this.IsFindArtiste && this.currentMusicArtists) {
       for (let artist of this.currentMusicArtists) {
-        if (this.isStringSimilar(artist.toLowerCase(), value, 0.70)) {
+        if (this.isStringSimilar(artist.toLowerCase(), value, 0.70) || (artist === "Caballero & JeanJass" && value === "caba et jj")) {
           this.IsFindArtiste = true;
           DesactivePresque = true;
           let artistsFound = "";
@@ -156,6 +156,7 @@ await: any;
     let presqueArtist = false;
     if (!this.IsFindArtiste && this.currentMusicArtists) {
       for (let artist of this.currentMusicArtists) {
+        console.log(artist)
         if (this.isStringSimilar(artist.toLowerCase(), value, 0.70)) {
           presqueArtist = true
         }
