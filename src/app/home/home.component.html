@@ -1,5 +1,4 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-
 <div class="container">
     <div class="top-text">
         <div class="title">Bienvenue sur SpotiBlindTest</div>
@@ -7,10 +6,10 @@
     </div>
     <div class="input-playlist">
         <div class="input-playlist-item">
-            <span class="material-symbols-outlined icon-search">search</span>
-            <input type="text" id="InputSearchPlaylist" placeholder="Entrez le nom d'une playlist..." value="" autocomplete="off" (input)="onSearchChange($event)">
-            <span *ngIf="!IsGlobalSearch" (click)="changeGlobalSearch(true)" class="material-symbols-outlined icon-public-earth">public_off</span>
-            <span *ngIf="IsGlobalSearch" (click)="changeGlobalSearch(false)" class="material-symbols-outlined icon-public-earth icon-public-earth-active">public</span> 
+        <span class="material-symbols-outlined icon-search">search</span>
+        <input type="text" id="InputSearchPlaylist" placeholder="Entrez le nom d'une playlist..." value="" autocomplete="off" (input)="onSearchChange($event)">
+        <span *ngIf="!IsGlobalSearch" (click)="changeGlobalSearch(true)" class="material-symbols-outlined icon-public-earth">public_off</span>
+        <span *ngIf="IsGlobalSearch" (click)="changeGlobalSearch(false)" class="material-symbols-outlined icon-public-earth icon-public-earth-active">public</span> 
         </div>
         <button mat-icon-button class="sort-by" [matMenuTriggerFor]="menu" aria-label="Trier par">
             <span class="material-symbols-outlined">sort</span>
@@ -33,13 +32,18 @@
         </mat-menu>
     </div>
     <div>
-    <div class="playlists" id="playlistScroll">
-            <a class="playlist-item glow" href="{{item.playlistUrl}}" *ngFor="let item of items" (click)="resetCount()" (mouseenter)="getGlow($event, item.imagePath)">
-                    <img src="{{item.imagePath}}" alt="{{item.PlaylistName}}" class="playlist-image">
-                    <p class="playlist-name">{{item.PlaylistName}}</p>
-            </a>
+        <div class="playlists" id="playlistScroll">
+        <a class="playlist-item glow" href="{{item.playlistUrl}}" *ngFor="let item of itemsPlaylists" (click)="resetCount()" (mouseenter)="getGlow($event, item.imagePath)">
+                <img src="{{item.imagePath}}" alt="{{item.PlaylistName}}" class="playlist-image">
+                <p class="playlist-name">{{item.PlaylistName}}</p>
+        </a>
+    </div>
+    <div class="albums" id="albumsScroll">
+        <a class="album-item glow" href="{{item.albumUrl}}" *ngFor="let item of itemsAlbums" (click)="resetCount()" (mouseenter)="getGlow($event, item.imagePath)">
+                <img src="{{item.imagePath}}" alt="{{item.albumName}}" class="playlist-image">
+                <p class="playlist-name">{{item.albumName}}</p>
+        </a>
     </div>
 </div>
 
-<div class="container-shadow">
-</div>
+
