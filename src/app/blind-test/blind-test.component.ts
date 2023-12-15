@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { error } from 'console';
 import { availableParallelism } from 'os';
@@ -15,6 +15,25 @@ import { PlaylistTracks, Track } from 'src/assets/code/ObjectsFormat'
   styleUrls: ['./blind-test.component.scss']
 })
 export class BlindTestComponent{
+
+  @HostListener('document:keyup.Space', ['$event'])
+  handleSpaceKey(event: KeyboardEvent): void {
+    if (!(event.target instanceof HTMLInputElement)) {
+      event.preventDefault();
+      this.PressSpace(event);
+    }
+  }
+
+  @HostListener('document:keyup.control.Enter', ['$event'])
+  handleCtrlEnterKey(event: KeyboardEvent): void {
+    if (event.target instanceof HTMLInputElement) {
+      event.preventDefault();
+      return;
+    }
+
+    this.PressCtrlEnter();
+  }
+  
 await: any;
   constructor(private router: Router,
               private configService: ConfigService) {}
@@ -40,6 +59,7 @@ await: any;
   IsFindAll: boolean = this.IsFindArtiste && this.IsFindSound;
   usedTracks: number[] = [];
   skipButtonAvailable: boolean = true;
+  previousValueInput: string = "";
 
   colorArtist: string = "gray";
   colorTitle: string = "gray";
@@ -76,11 +96,12 @@ await: any;
 
     await this.nextMusic(true);
     document.documentElement.style.setProperty('--hidden', "hidden");
-    const input = document.getElementById('InputMusic');
+    const input = document.getElementById('InputMusic') as HTMLInputElement;
     if (input)
     {
       input.addEventListener('keyup', (event) => {
         if (event.key === 'Enter') {
+          this.previousValueInput = input.value.trim();
           if (this.IsFindAll)
             this.nextMusic()
           else
@@ -109,6 +130,16 @@ await: any;
   PressCtrlEnter(): void
   {
     this.skipMusic();
+  }
+
+  PressArrowUp(event: any | null): void 
+  {
+    let input = event.target as HTMLInputElement;
+    if (input && this.previousValueInput !== "" && input.value !== this.previousValueInput)
+    {
+      input.value = this.previousValueInput
+    }
+      
   }
 
   findMusic(): void {
@@ -151,7 +182,7 @@ await: any;
     }
 
     // Afficher un message si la valeur entrée est proche
-    // TODO ca mqfvhee pas
+    // TODO ca marche pas
     console.log(DesactivePresque)
     let presqueArtist = false;
     if (!this.IsFindArtiste && this.currentMusicArtists) {
