@@ -1,4 +1,5 @@
 import { Component, HostListener } from '@angular/core';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Router } from '@angular/router';
 import { error } from 'console';
 import { availableParallelism } from 'os';
@@ -69,6 +70,9 @@ await: any;
   items: any[] = []; // Déclaration du tableau de données
 
   actualMusic: Track | undefined = undefined;
+
+  isMultiplayerMode = false;
+
   async ngOnInit() {
     const urlParams = new URLSearchParams(window.location.search);
     this.idPlaylist = urlParams.get('id');
@@ -115,6 +119,11 @@ await: any;
         }
       });
     }
+  }
+
+  toggleMultiplayer(event: MatSlideToggleChange)
+  {
+    this.isMultiplayerMode = event.checked;
   }
 
   PressSpace(event: any | null): void
