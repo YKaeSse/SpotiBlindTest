@@ -4,7 +4,7 @@
     <div>
         <mat-slide-toggle class="slide-multiplayerMode" (change)="toggleMultiplayer($event)">Mode multijoueur oral</mat-slide-toggle>
     </div>
-    <div *ngIf="!isMultiplayerMode; else MultiplayerMode">
+    <div *ngIf="isMultiplayerMode; else MultiplayerMode">
         <div class="music-player-and-find-items">
             <div class="music-player-and-skip">
                 <div class="music-player">
@@ -39,10 +39,11 @@
     <ng-template #MultiplayerMode>
         <div class="container-multiplayerMode">
             <div class="music-player-and-skip">
-                <div class="music-player">
-                    <span (click)="togglePlayPause()" class="material-symbols-outlined" id="playButton" >{{PlayOrPause}}</span>
-                    <div>
-                        <div [style.width.%]="currentProgress"></div>
+                <div class="music-player-multiplayerMode">
+                    <div [style.transform]="'rotate(' + calculateRotation() + 'deg)'">
+                        <div>
+                            <span (click)="togglePlayPause()" class="material-symbols-outlined" id="playButton">{{PlayOrPause}}</span>
+                        </div>  
                     </div>
                 </div>
                 <span id="skip_song" (click)="skipMusic()" class="material-symbols-outlined">skip_next</span>

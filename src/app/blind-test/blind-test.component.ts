@@ -266,7 +266,6 @@ await: any;
         this.nextMusic();
       }*/
     }
-
   }
 
   togglePlayPause(): void {
@@ -384,7 +383,7 @@ await: any;
     {
       for (let i = 0; i < this.currentMusicName.length; i++)
       {
-        if (this.currentMusicName[i] === '-' || this.currentMusicName[i] === '(')
+        if ((this.currentMusicName[i] === '-' && this.currentMusicName[i - 1] === ' ' && this.currentMusicName[i + 1] === ' ') || this.currentMusicName[i] === '(')
         {
           this.currentMusicName = this.currentMusicName.substring(0, i).trim();
           break;
@@ -487,7 +486,9 @@ await: any;
     }
   }
 
-
+  calculateRotation(): string {
+    return `rotate(${this.currentProgress * 3.6}deg)`;
+  }
 
 }
 
