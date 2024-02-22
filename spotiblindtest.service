@@ -1,0 +1,13 @@
+[Unit]
+Description=SpotiBlindTest website
+After=network.target
+
+[Service]
+ExecStart=/home/pi/Documents/SpotiBlindTest/launchServer.sh
+WorkingDirectory=/home/pi/Documents/SpotiBlindTest
+User=pi
+Group=pi
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
